@@ -1,0 +1,20 @@
+{
+  "kind": "GlobalDatasource",
+  "metadata": {
+    "name": "pyroscope"
+  },
+  "spec": {
+    "default": true,
+    "plugin": {
+      "kind": "PyroscopeDatasource",
+      "spec": {
+        "proxy": {
+          "kind": "HTTPProxy",
+          "spec": {
+            "url": "http://pyroscope.observability:4040"
+          }
+        }
+      }
+    }
+  }
+}

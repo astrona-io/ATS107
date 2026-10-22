@@ -1,0 +1,613 @@
+# The observability stack of every ATS107 environment, in the namespace
+# observability: Prometheus (metrics), Loki and a basic-auth gateway (logs),
+# Tempo (traces), Pyroscope (profiles), telemetry generators and a tester pod.
+# Perses itself is installed by Helm in the bootstrap, not by this file.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: observability
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+    # Resource attributes sent over OTLP become labels on every series.
+    otlp:
+      promote_resource_attributes:
+        - service.name
+        - deployment.environment
+    scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets: ["localhost:9090"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: observability
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v3.15.1
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.retention.time=1d
+            - --web.enable-otlp-receiver
+          ports:
+            - name: http
+              containerPort: 9090
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: http
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+      volumes:
+        - name: config
+          configMap:
+            name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: observability
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - name: http
+      port: 9090
+      targetPort: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-config
+  namespace: observability
+data:
+  config.yaml: |
+    auth_enabled: false
+    server:
+      http_listen_port: 3100
+      grpc_listen_port: 9096
+    common:
+      instance_addr: 127.0.0.1
+      path_prefix: /loki
+      storage:
+        filesystem:
+          chunks_directory: /loki/chunks
+          rules_directory: /loki/rules
+      replication_factor: 1
+      ring:
+        kvstore:
+          store: inmemory
+    schema_config:
+      configs:
+        - from: "2024-01-01"
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: index_
+            period: 24h
+    limits_config:
+      allow_structured_metadata: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki
+  namespace: observability
+  labels:
+    app: loki
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+  template:
+    metadata:
+      labels:
+        app: loki
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+        - name: loki
+          image: grafana/loki:3.7.9
+          args:
+            - -config.file=/etc/loki/config.yaml
+          ports:
+            - name: http
+              containerPort: 3100
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 10
+          volumeMounts:
+            - name: config
+              mountPath: /etc/loki
+            - name: data
+              mountPath: /loki
+      volumes:
+        - name: config
+          configMap:
+            name: loki-config
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki
+  namespace: observability
+spec:
+  selector:
+    app: loki
+  ports:
+    - name: http
+      port: 3100
+      targetPort: http
+---
+# Basic authentication in front of Loki. Lab-only user `perses` with the
+# password `loki-gateway-password` (apr1 hash below).
+apiVersion: v1
+kind: Secret
+metadata:
+  name: loki-gateway-htpasswd
+  namespace: observability
+type: Opaque
+stringData:
+  htpasswd: "perses:$apr1$astrona$f/g.byg16yDX7NcPUys43."
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-gateway-config
+  namespace: observability
+data:
+  default.conf: |
+    server {
+      listen 80;
+      location / {
+        auth_basic "loki";
+        auth_basic_user_file /etc/nginx/htpasswd/htpasswd;
+        proxy_pass http://loki.observability:3100;
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-gateway
+  namespace: observability
+  labels:
+    app: loki-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-gateway
+  template:
+    metadata:
+      labels:
+        app: loki-gateway
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: config
+              mountPath: /etc/nginx/conf.d
+            - name: htpasswd
+              mountPath: /etc/nginx/htpasswd
+      volumes:
+        - name: config
+          configMap:
+            name: loki-gateway-config
+        - name: htpasswd
+          secret:
+            secretName: loki-gateway-htpasswd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-gateway
+  namespace: observability
+spec:
+  selector:
+    app: loki-gateway
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tempo-config
+  namespace: observability
+data:
+  tempo.yaml: |
+    server:
+      http_listen_port: 3200
+    distributor:
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+    storage:
+      trace:
+        backend: local
+        wal:
+          path: /var/tempo/wal
+        local:
+          path: /var/tempo/blocks
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempo
+  namespace: observability
+  labels:
+    app: tempo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tempo
+  template:
+    metadata:
+      labels:
+        app: tempo
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+        - name: tempo
+          image: grafana/tempo:2.10.10
+          args:
+            - -config.file=/etc/tempo/tempo.yaml
+          ports:
+            - name: http
+              containerPort: 3200
+            - name: otlp-grpc
+              containerPort: 4317
+            - name: otlp-http
+              containerPort: 4318
+          volumeMounts:
+            - name: config
+              mountPath: /etc/tempo
+            - name: data
+              mountPath: /var/tempo
+      volumes:
+        - name: config
+          configMap:
+            name: tempo-config
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tempo
+  namespace: observability
+spec:
+  selector:
+    app: tempo
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+    - name: otlp-grpc
+      port: 4317
+      targetPort: otlp-grpc
+    - name: otlp-http
+      port: 4318
+      targetPort: otlp-http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyroscope
+  namespace: observability
+  labels:
+    app: pyroscope
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pyroscope
+  template:
+    metadata:
+      labels:
+        app: pyroscope
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+        - name: pyroscope
+          image: grafana/pyroscope:2.4.1
+          ports:
+            - name: http
+              containerPort: 4040
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pyroscope
+  namespace: observability
+spec:
+  selector:
+    app: pyroscope
+  ports:
+    - name: http
+      port: 4040
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tester
+  namespace: observability
+  labels:
+    app: tester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tester
+  template:
+    metadata:
+      labels:
+        app: tester
+    spec:
+      containers:
+        - name: tester
+          image: nicolaka/netshoot:v0.13
+          command: ["sh", "-c", "while true; do sleep 30; done"]
+---
+# Sends traces, logs and the counter app_requests for checkout in production.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telemetry-production-checkout
+  namespace: observability
+  labels:
+    app: telemetry-production-checkout
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telemetry-production-checkout
+  template:
+    metadata:
+      labels:
+        app: telemetry-production-checkout
+    spec:
+      containers:
+        - name: traces
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'traces'
+            - '--otlp-endpoint=tempo.observability:4317'
+            - '--otlp-insecure'
+            - '--child-spans=2'
+            - '--service=checkout'
+            - '--otlp-attributes=deployment.environment="production"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+        - name: logs
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'logs'
+            - '--otlp-http'
+            - '--otlp-endpoint=loki.observability:3100'
+            - '--otlp-http-url-path=/otlp/v1/logs'
+            - '--otlp-insecure'
+            - '--body=order handled by checkout'
+            - '--service=checkout'
+            - '--otlp-attributes=deployment.environment="production"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+        - name: metrics
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'metrics'
+            - '--otlp-http'
+            - '--otlp-endpoint=prometheus.observability:9090'
+            - '--otlp-http-url-path=/api/v1/otlp/v1/metrics'
+            - '--otlp-insecure'
+            - '--metric-type=Sum'
+            - '--aggregation-temporality=cumulative'
+            - '--otlp-metric-name=app_requests'
+            - '--service=checkout'
+            - '--otlp-attributes=deployment.environment="production"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+---
+# Sends traces, logs and the counter app_requests for payments in production.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telemetry-production-payments
+  namespace: observability
+  labels:
+    app: telemetry-production-payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telemetry-production-payments
+  template:
+    metadata:
+      labels:
+        app: telemetry-production-payments
+    spec:
+      containers:
+        - name: traces
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'traces'
+            - '--otlp-endpoint=tempo.observability:4317'
+            - '--otlp-insecure'
+            - '--child-spans=2'
+            - '--service=payments'
+            - '--otlp-attributes=deployment.environment="production"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+        - name: logs
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'logs'
+            - '--otlp-http'
+            - '--otlp-endpoint=loki.observability:3100'
+            - '--otlp-http-url-path=/otlp/v1/logs'
+            - '--otlp-insecure'
+            - '--body=order handled by payments'
+            - '--service=payments'
+            - '--otlp-attributes=deployment.environment="production"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+        - name: metrics
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'metrics'
+            - '--otlp-http'
+            - '--otlp-endpoint=prometheus.observability:9090'
+            - '--otlp-http-url-path=/api/v1/otlp/v1/metrics'
+            - '--otlp-insecure'
+            - '--metric-type=Sum'
+            - '--aggregation-temporality=cumulative'
+            - '--otlp-metric-name=app_requests'
+            - '--service=payments'
+            - '--otlp-attributes=deployment.environment="production"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+---
+# Sends traces, logs and the counter app_requests for checkout in staging.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telemetry-staging-checkout
+  namespace: observability
+  labels:
+    app: telemetry-staging-checkout
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telemetry-staging-checkout
+  template:
+    metadata:
+      labels:
+        app: telemetry-staging-checkout
+    spec:
+      containers:
+        - name: traces
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'traces'
+            - '--otlp-endpoint=tempo.observability:4317'
+            - '--otlp-insecure'
+            - '--child-spans=2'
+            - '--service=checkout'
+            - '--otlp-attributes=deployment.environment="staging"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+        - name: logs
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'logs'
+            - '--otlp-http'
+            - '--otlp-endpoint=loki.observability:3100'
+            - '--otlp-http-url-path=/otlp/v1/logs'
+            - '--otlp-insecure'
+            - '--body=order handled by checkout'
+            - '--service=checkout'
+            - '--otlp-attributes=deployment.environment="staging"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+        - name: metrics
+          image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+          args:
+            - 'metrics'
+            - '--otlp-http'
+            - '--otlp-endpoint=prometheus.observability:9090'
+            - '--otlp-http-url-path=/api/v1/otlp/v1/metrics'
+            - '--otlp-insecure'
+            - '--metric-type=Sum'
+            - '--aggregation-temporality=cumulative'
+            - '--otlp-metric-name=app_requests'
+            - '--service=checkout'
+            - '--otlp-attributes=deployment.environment="staging"'
+            - '--rate=1'
+            - '--duration=inf'
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi

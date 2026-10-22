@@ -1,0 +1,56 @@
+# Repair A Dashboard That Shows Nothing
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-107-capstone-020"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, percli, the observability stack and Perses v0.54.0"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-107-capstone-020-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The observability stack"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses answers and telemetry has arrived"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-panels-kept"
+      description: "Confirms no panel of signals was removed"
+      type: "file"
+      source: "validation/validate-panels-kept.sh"
+    - name: "validate-layout"
+      description: "Confirms every panel of signals is placed in a layout"
+      type: "file"
+      source: "validation/validate-layout.sh"
+    - name: "validate-panels-return-data"
+      description: "Confirms every panel query of signals returns data through the proxy"
+      type: "file"
+      source: "validation/validate-panels-return-data.sh"
+
+teardown:
+  keepCluster: false

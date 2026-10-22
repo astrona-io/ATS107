@@ -1,0 +1,60 @@
+# Give A Project Its Own Loki Datasource
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-107-lab-010-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, percli, the observability stack and Perses v0.54.0"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-107-lab-010-01-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The observability stack"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses answers and telemetry has arrived"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-project-datasource"
+      description: "Confirms the project datasource loki overrides the global one and takes its credentials from the Secret loki-gateway-auth"
+      type: "file"
+      source: "validation/validate-project-datasource.sh"
+    - name: "validate-proxy-answers"
+      description: "Confirms Loki answers through the project datasource proxy"
+      type: "file"
+      source: "validation/validate-proxy-answers.sh"
+    - name: "validate-endpoints-restricted"
+      description: "Confirms the proxy only forwards the listed Loki read endpoints"
+      type: "file"
+      source: "validation/validate-endpoints-restricted.sh"
+    - name: "validate-global-unchanged"
+      description: "Confirms the GlobalDatasource loki is unchanged"
+      type: "file"
+      source: "validation/validate-global-unchanged.sh"
+
+teardown:
+  keepCluster: false

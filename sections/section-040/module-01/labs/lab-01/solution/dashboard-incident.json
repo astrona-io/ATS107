@@ -1,0 +1,175 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "incident",
+    "project": "inventory"
+  },
+  "spec": {
+    "display": {
+      "name": "Incident"
+    },
+    "duration": "1h",
+    "variables": [
+      {
+        "kind": "ListVariable",
+        "spec": {
+          "name": "env",
+          "display": {
+            "name": "Environment",
+            "hidden": false
+          },
+          "allowAllValue": false,
+          "allowMultiple": false,
+          "sort": "alphabetical-asc",
+          "plugin": {
+            "kind": "PrometheusLabelValuesVariable",
+            "spec": {
+              "labelName": "deployment_environment",
+              "matchers": [
+                "app_requests_total"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "kind": "ListVariable",
+        "spec": {
+          "name": "service",
+          "display": {
+            "name": "Service",
+            "hidden": false
+          },
+          "allowAllValue": false,
+          "allowMultiple": false,
+          "sort": "alphabetical-asc",
+          "plugin": {
+            "kind": "PrometheusLabelValuesVariable",
+            "spec": {
+              "labelName": "service_name",
+              "matchers": [
+                "app_requests_total{deployment_environment=\"$env\"}"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "panels": {
+      "request-rate": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Request rate"
+          },
+          "plugin": {
+            "kind": "TimeSeriesChart",
+            "spec": {}
+          },
+          "queries": [
+            {
+              "kind": "TimeSeriesQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "PrometheusTimeSeriesQuery",
+                  "spec": {
+                    "query": "sum by (service_name) (rate(app_requests_total{deployment_environment=\"$env\", service_name=\"$service\"}[5m]))"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "logs": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Logs"
+          },
+          "plugin": {
+            "kind": "LogsTable",
+            "spec": {
+              "showTime": true
+            }
+          },
+          "queries": [
+            {
+              "kind": "LogQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "LokiLogQuery",
+                  "spec": {
+                    "query": "{deployment_environment=\"$env\", service_name=\"$service\"}"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "traces": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Traces"
+          },
+          "plugin": {
+            "kind": "TraceTable",
+            "spec": {}
+          },
+          "queries": [
+            {
+              "kind": "TraceQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "TempoTraceQuery",
+                  "spec": {
+                    "query": "{resource.deployment.environment=\"$env\" && resource.service.name=\"$service\"}",
+                    "limit": 20
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 12,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/request-rate"
+              }
+            },
+            {
+              "x": 12,
+              "y": 0,
+              "width": 12,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/logs"
+              }
+            },
+            {
+              "x": 0,
+              "y": 8,
+              "width": 12,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/traces"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

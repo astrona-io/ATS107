@@ -1,0 +1,51 @@
+{
+  "kind": "Datasource",
+  "metadata": {
+    "name": "tempo",
+    "project": "inventory"
+  },
+  "spec": {
+    "default": true,
+    "plugin": {
+      "kind": "TempoDatasource",
+      "spec": {
+        "proxy": {
+          "kind": "HTTPProxy",
+          "spec": {
+            "url": "http://tempo.observability:3200",
+            "allowedEndpoints": [
+              {
+                "endpointPattern": "/api/search",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/api/search/tags",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/api/search/tag/([a-zA-Z0-9_.-]+)/values",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/api/v2/search/tags",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/api/v2/search/tag/([a-zA-Z0-9_.-]+)/values",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/api/traces/([a-zA-Z0-9]+)",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/api/v2/traces/([a-zA-Z0-9]+)",
+                "method": "GET"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

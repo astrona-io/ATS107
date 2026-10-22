@@ -1,0 +1,56 @@
+# Repair The Datasources Of A Project
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-107-capstone-010"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, percli, the observability stack and Perses v0.54.0"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-107-capstone-010-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The observability stack"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses answers and telemetry has arrived"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-prometheus"
+      description: "Confirms the global Prometheus datasource answers a query"
+      type: "file"
+      source: "validation/validate-prometheus.sh"
+    - name: "validate-loki"
+      description: "Confirms the project Loki datasource answers with credentials from its Secret"
+      type: "file"
+      source: "validation/validate-loki.sh"
+    - name: "validate-tempo"
+      description: "Confirms the project Tempo datasource searches traces and still restricts its endpoints"
+      type: "file"
+      source: "validation/validate-tempo.sh"
+
+teardown:
+  keepCluster: false

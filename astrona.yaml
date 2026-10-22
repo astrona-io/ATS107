@@ -1,0 +1,340 @@
+# Course manifest for ATS107 - Multi-Pillar Datasources & Variable Scopes (Perses).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS107
+  title: "Perses: Multi-Pillar Datasources & Variable Scopes"
+  maturity: draft
+  description: >
+    Training material covering the Multi-Pillar Datasources & Variable Scopes
+    domain of the Perses training path: global, project and dashboard
+    datasources, the Perses proxy and its allowed endpoints, Secrets for
+    datasource credentials, panels for metrics from Prometheus, logs from
+    Loki, traces from Tempo and profiles from Pyroscope, list and text
+    variables, variables backed by queries and datasources, interpolation
+    formats and variable scopes, and variables that cascade from environment
+    to service across PromQL, LogQL and TraceQL. Each module pairs a layered
+    reader with an ungraded hands-on playground and a graded practice lab.
+    Each section closes with an integration capstone.
+    Written for Perses v0.54.0.
+
+  certification:
+    name: Perses
+    code: PERSES
+    provider: Astrona
+    domain: Multi-Pillar Datasources & Variable Scopes
+    weight: 20
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "Datasources And Their Scopes"
+    description: >
+      Global, project and dashboard datasources and how the smallest scope
+      wins, the default datasource of each kind, the Perses proxy and its
+      allowed endpoints, and Secrets that hold a backend's credentials.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Connect Perses To Your Data Backends"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "Datasources, Scopes And Overrides"
+        path: sections/section-010/module-01/course-01-datasources-and-scopes.md
+      - type: reading
+        title: "The Perses Proxy And Allowed Endpoints"
+        path: sections/section-010/module-01/course-02-the-proxy-and-allowed-endpoints.md
+      - type: reading
+        title: "Secrets For Datasource Credentials"
+        path: sections/section-010/module-01/course-03-secrets-for-datasources.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Give A Project Its Own Loki Datasource Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 20m
+        topic: secrets
+        task_kind: build
+        tags: [project-datasource, datasource-override, secret, basic-auth, allowed-endpoints, loki]
+        learning_goals:
+          - Store a backend's credentials in a project Secret and reference it from a datasource
+          - Override a GlobalDatasource for one project with a Datasource of the same name
+          - Limit the proxy to the Loki read endpoints and prove the rest is refused
+        resources:
+          - name: "Datasource"
+            url: https://perses.dev/perses/docs/concepts/datasource/
+          - name: "Datasource and variable scopes"
+            url: https://perses.dev/perses/docs/concepts/datasource-and-variable-scopes/
+          - name: "Secret API"
+            url: https://perses.dev/perses/docs/api/secret/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair The Datasources Of A Project Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: proxy
+        task_kind: troubleshooting
+        tags: [global-datasource, project-datasource, http-proxy, allowed-endpoints, secret, tempo, prometheus]
+        learning_goals:
+          - Find why each datasource fails from the answer its proxy path gives
+          - Fix a wrong backend URL, a too-narrow endpoint list and a stale Secret
+          - Prove every datasource answers through the proxy while the endpoint lists still restrict access
+        resources:
+          - name: "Datasource"
+            url: https://perses.dev/perses/docs/concepts/datasource/
+          - name: "Secret API"
+            url: https://perses.dev/perses/docs/api/secret/
+          - name: "Tempo HTTP API"
+            url: https://grafana.com/docs/tempo/latest/api_docs/
+
+  - id: module-020
+    title: "Metrics, Logs, Traces And Profiles"
+    description: >
+      The dashboard model of panels, queries and layouts, and one panel per
+      signal: time series from Prometheus, logs from Loki, traces from Tempo
+      and flame graphs from Pyroscope.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Show Metrics, Logs, Traces And Profiles"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "Metrics Panels And The Dashboard Model"
+        path: sections/section-020/module-01/course-01-metrics-and-the-dashboard-model.md
+      - type: reading
+        title: "Logs From Loki"
+        path: sections/section-020/module-01/course-02-logs-from-loki.md
+      - type: reading
+        title: "Traces From Tempo And Profiles From Pyroscope"
+        path: sections/section-020/module-01/course-03-traces-and-profiles.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Build A Dashboard For Four Signals Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: panels
+        task_kind: build
+        tags: [time-series-chart, logs-table, trace-table, flame-chart, layout, percli-apply]
+        learning_goals:
+          - Write a dashboard with one panel and one matching query for each signal
+          - Place every panel in a grid layout
+          - Prove every panel's query returns data through the Perses proxy
+        resources:
+          - name: "Dashboard"
+            url: https://perses.dev/perses/docs/concepts/dashboard/
+          - name: "Perses plugins"
+            url: https://perses.dev/plugins/docs/
+          - name: "TraceQL"
+            url: https://grafana.com/docs/tempo/latest/traceql/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Dashboard That Shows Nothing Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: panels
+        task_kind: troubleshooting
+        tags: [promql, logql, trace-table, layout, default-datasource, time-series-chart]
+        learning_goals:
+          - Find why each panel is empty from its query, its datasource and the layout
+          - Fix the queries, the datasource reference and the layout without deleting panels
+          - Prove every panel's query returns data through the Perses proxy
+        resources:
+          - name: "Dashboard"
+            url: https://perses.dev/perses/docs/concepts/dashboard/
+          - name: "LogQL"
+            url: https://grafana.com/docs/loki/latest/query/
+
+  - id: module-030
+    title: "Dashboard Variables"
+    description: >
+      Text and list variables, list values from static lists, label values,
+      PromQL and datasources, interpolation formats for one and several
+      values, and variables at dashboard, project and global scope.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Make Dashboards Interactive With Variables"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "List And Text Variables"
+        path: sections/section-030/module-01/course-01-list-and-text-variables.md
+      - type: reading
+        title: "Variables Backed By Queries And Datasources"
+        path: sections/section-030/module-01/course-02-variables-from-queries.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Add A Datasource Selector And A Service Variable Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: variables
+        task_kind: build
+        tags: [datasource-variable, label-values, list-variable, interpolation-format, promql, prometheus]
+        learning_goals:
+          - Add a variable that selects which Prometheus datasource the dashboard uses
+          - Add a multi-value service variable whose values come from that datasource
+          - Prove the panel query returns data for the selected services
+        resources:
+          - name: "Variable"
+            url: https://perses.dev/perses/docs/concepts/variable/
+          - name: "Datasource and variable scopes"
+            url: https://perses.dev/perses/docs/concepts/datasource-and-variable-scopes/
+      - type: reading
+        title: "Interpolation Formats And Variable Scopes"
+        path: sections/section-030/module-01/course-03-formats-and-scopes.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Fix Variables That Show The Wrong Values Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: variables
+        task_kind: troubleshooting
+        tags: [project-variable, global-variable, label-values, interpolation-format, static-list, promql]
+        learning_goals:
+          - Find which scope a variable's values come from and why they are wrong
+          - Fix a label name, a stale project override and a matcher that cannot take several values
+          - Prove the panel query returns data for every selected value
+        resources:
+          - name: "Variable"
+            url: https://perses.dev/perses/docs/concepts/variable/
+          - name: "Datasource and variable scopes"
+            url: https://perses.dev/perses/docs/concepts/datasource-and-variable-scopes/
+
+  - id: module-040
+    title: "Cascading Variables Across Signals"
+    description: >
+      Variables whose values depend on other variables, and one environment
+      and service selection written into PromQL, LogQL and TraceQL so metrics,
+      logs and traces of the same service sit on one incident dashboard.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: "Build A Unified Incident Dashboard"
+        path: sections/section-040/module-01/course.md
+      - type: reading
+        title: "Variables That Depend On Other Variables"
+        path: sections/section-040/module-01/course-01-variables-that-depend-on-variables.md
+      - type: reading
+        title: "One Value In PromQL, LogQL And TraceQL"
+        path: sections/section-040/module-01/course-02-one-value-three-query-languages.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Build A Unified Incident Dashboard Lab"
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: cascading
+        task_kind: build
+        tags: [cascading-variables, label-values, promql, logql, traceql, trace-table, logs-table]
+        learning_goals:
+          - Build an environment variable and a service variable that only lists services of the selected environment
+          - Use both variables in a metrics, a logs and a traces panel
+          - Prove every panel returns data for each environment and service pair
+        resources:
+          - name: "Variable"
+            url: https://perses.dev/perses/docs/concepts/variable/
+          - name: "LogQL"
+            url: https://grafana.com/docs/loki/latest/query/
+          - name: "TraceQL"
+            url: https://grafana.com/docs/tempo/latest/traceql/
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-03-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair An Incident Dashboard That Hides Data Capstone"
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: cascading
+        task_kind: troubleshooting
+        tags: [cascading-variables, label-values, logql, traceql, promql, logs-table]
+        learning_goals:
+          - Find why the service list ignores the environment and why two panels stay empty
+          - Fix the variable order, the matcher and the label names in LogQL and TraceQL
+          - Prove the cascade and every panel for each environment and service pair
+        resources:
+          - name: "Variable"
+            url: https://perses.dev/perses/docs/concepts/variable/
+          - name: "TraceQL"
+            url: https://grafana.com/docs/tempo/latest/traceql/

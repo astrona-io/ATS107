@@ -1,0 +1,56 @@
+# Fix Variables That Show The Wrong Values
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-107-capstone-030"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, percli, the observability stack and Perses v0.54.0"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-107-capstone-030-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The observability stack"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses answers and telemetry has arrived"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-env-values"
+      description: "Confirms the env values the project's dashboards get are production and staging, and the GlobalVariable is unchanged"
+      type: "file"
+      source: "validation/validate-env-values.sh"
+    - name: "validate-service-variable"
+      description: "Confirms the service variable lists service_name values for the selected environment"
+      type: "file"
+      source: "validation/validate-service-variable.sh"
+    - name: "validate-panel-query"
+      description: "Confirms the panel query returns data when two services are selected"
+      type: "file"
+      source: "validation/validate-panel-query.sh"
+
+teardown:
+  keepCluster: false

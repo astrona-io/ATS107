@@ -1,0 +1,26 @@
+{
+  "kind": "GlobalVariable",
+  "metadata": {
+    "name": "env"
+  },
+  "spec": {
+    "kind": "ListVariable",
+    "spec": {
+      "display": {
+        "name": "Environment",
+        "hidden": false
+      },
+      "allowAllValue": false,
+      "allowMultiple": false,
+      "plugin": {
+        "kind": "StaticListVariable",
+        "spec": {
+          "values": [
+            "production",
+            "staging"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "kind": "Variable",
+  "metadata": {
+    "name": "env",
+    "project": "inventory"
+  },
+  "spec": {
+    "kind": "ListVariable",
+    "spec": {
+      "display": {
+        "name": "Environment",
+        "hidden": false
+      },
+      "allowAllValue": false,
+      "allowMultiple": false,
+      "plugin": {
+        "kind": "StaticListVariable",
+        "spec": {
+          "values": [
+            "prod",
+            "stage"
+          ]
+        }
+      }
+    }
+  }
+}

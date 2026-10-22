@@ -1,0 +1,27 @@
+{
+  "kind": "Datasource",
+  "metadata": {
+    "name": "tempo",
+    "project": "inventory"
+  },
+  "spec": {
+    "default": true,
+    "plugin": {
+      "kind": "TempoDatasource",
+      "spec": {
+        "proxy": {
+          "kind": "HTTPProxy",
+          "spec": {
+            "url": "http://tempo.observability:3200",
+            "allowedEndpoints": [
+              {
+                "endpointPattern": "/api/echo",
+                "method": "GET"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

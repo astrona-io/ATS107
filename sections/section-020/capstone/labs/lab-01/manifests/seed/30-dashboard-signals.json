@@ -1,0 +1,166 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "signals",
+    "project": "inventory"
+  },
+  "spec": {
+    "display": {
+      "name": "Signals"
+    },
+    "duration": "1h",
+    "variables": [],
+    "panels": {
+      "requests": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Request rate"
+          },
+          "plugin": {
+            "kind": "TimeSeriesChart",
+            "spec": {}
+          },
+          "queries": [
+            {
+              "kind": "TimeSeriesQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "PrometheusTimeSeriesQuery",
+                  "spec": {
+                    "query": "sum by (service) (rate(app_requests_total{service=\"checkout\"}[5m]))"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "logs": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Logs"
+          },
+          "plugin": {
+            "kind": "LogsTable",
+            "spec": {
+              "showTime": true
+            }
+          },
+          "queries": [
+            {
+              "kind": "LogQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "LokiLogQuery",
+                  "spec": {
+                    "query": "{service_name=\"checkout\"}",
+                    "datasource": {
+                      "kind": "LokiDatasource",
+                      "name": "loki-archive"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "traces": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Traces"
+          },
+          "plugin": {
+            "kind": "TraceTable",
+            "spec": {}
+          },
+          "queries": [
+            {
+              "kind": "TraceQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "TempoTraceQuery",
+                  "spec": {
+                    "query": "{resource.service.name=\"checkout\"}",
+                    "limit": 20
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "profile": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "CPU profile"
+          },
+          "plugin": {
+            "kind": "FlameChart",
+            "spec": {
+              "palette": "package-name",
+              "showSettings": true,
+              "showSeries": false,
+              "showTable": true,
+              "showFlameGraph": true
+            }
+          },
+          "queries": [
+            {
+              "kind": "ProfileQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "PyroscopeProfileQuery",
+                  "spec": {
+                    "profileType": "process_cpu:cpu:nanoseconds:cpu:nanoseconds",
+                    "service": "pyroscope"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 12,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/requests"
+              }
+            },
+            {
+              "x": 12,
+              "y": 0,
+              "width": 12,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/logs"
+              }
+            },
+            {
+              "x": 0,
+              "y": 8,
+              "width": 12,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/profile"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
