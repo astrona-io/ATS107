@@ -9,7 +9,6 @@ metadata:
     question: "question.md"
     examQuestion: "question.md"
     prerequisites: "prerequisites.md"
-
 bootstrap:
   init:
     - name: "install-perses"
@@ -25,7 +24,6 @@ bootstrap:
       description: "The observability stack"
       type: "file"
       source: "manifests/lab-start.yaml"
-
 testing:
   init:
     - name: "wait-for-perses"
@@ -36,7 +34,6 @@ testing:
       description: "The work a correct learner does; used by `astrona test`"
       type: "file"
       source: "solution/apply.sh"
-
 validation:
   scripts:
     - name: "validate-project-datasource"
@@ -55,6 +52,16 @@ validation:
       description: "Confirms the GlobalDatasource loki is unchanged"
       type: "file"
       source: "validation/validate-global-unchanged.sh"
-
 teardown:
   keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - docker.io/persesdev/perses:v0.54.0
+      - ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+      - grafana/loki:3.7.9
+      - grafana/pyroscope:2.4.1
+      - grafana/tempo:2.10.10
+      - nginx:1.27-alpine
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1
