@@ -166,7 +166,12 @@ query_returns_data() {
 }
 
 for _ in $(seq 1 120); do
-  if [ "$(http_status GET /api/v1/projects)" = "200" ] && [ "$(prom_series app_requests_total)" -gt 0 ] 2>/dev/null; then
+  # Ask Prometheus directly, not through a Perses datasource: a lab may start
+  # with a broken datasource, and that fault is the task. Every request has a
+  # time limit, so a broken address cannot stall the loop.
+  if [ "$(tester curl -s -m 5 -o /dev/null -w '%{http_code}' "$PERSES_API/api/v1/projects")" = "200" ] \
+     && [ "$(tester curl -s -m 5 -G http://prometheus.observability:9090/api/v1/query \
+            --data-urlencode 'query=app_requests_total' | jq -r '(.data.result // []) | length' 2>/dev/null)" -gt 0 ] 2>/dev/null; then
     exit 0
   fi
   sleep 5
