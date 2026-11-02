@@ -31,8 +31,6 @@ training:
     name: Perses
     code: PERSES
     provider: Astrona
-    domain: Multi-Pillar Datasources & Variable Scopes
-    weight: 20
 
 modules:
 
