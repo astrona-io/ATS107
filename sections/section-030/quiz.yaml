@@ -1,0 +1,245 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats107-030
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "Dashboard Variables"
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+  - id: ats107-030-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe a constant text variable"
+    source_readings:
+      - sections/section-030/module-01/course-01-list-and-text-variables.md
+    prompt: "A `TextVariable` has `constant: true`. What does the reader see?"
+    options:
+      - id: a
+        text: "A dropdown with all values of a label."
+        explanation: "Not correct. That is a `ListVariable`."
+      - id: b
+        text: "A field that is hidden and unused in queries."
+        explanation: "Not correct. `hidden` hides a variable. Constant only locks the value."
+      - id: c
+        text: "A field that resets to empty after each query."
+        explanation: "Not correct. The value stays as set in the spec."
+      - id: d
+        text: "A field with the value from the spec that the reader cannot change."
+        explanation: "Correct. `constant` locks the value."
+    correct_option: d
+    explanation: "Correct. `constant` locks the value."
+
+  - id: ats107-030-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name where a GlobalVariable gets its name"
+    source_readings:
+      - sections/section-030/module-01/course-03-formats-and-scopes.md
+    prompt: "Where does a `GlobalVariable` get its name?"
+    options:
+      - id: a
+        text: "From `spec.name`."
+        explanation: "Not correct. A `GlobalVariable` has no `name` inside its spec."
+      - id: b
+        text: "From `metadata.name`."
+        explanation: "Correct. Only dashboard variables have a `spec.name`."
+      - id: c
+        text: "From the name of the first panel that uses it."
+        explanation: "Not correct. A variable's name does not depend on panels."
+      - id: d
+        text: "From the project that created it."
+        explanation: "Not correct. A global variable belongs to no project."
+    correct_option: b
+    explanation: "Correct. Only dashboard variables have a `spec.name`."
+
+  - id: ats107-030-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Spot a bad default value"
+    source_readings:
+      - sections/section-030/module-01/course-01-list-and-text-variables.md
+    prompt: "A `ListVariable` has `defaultValue: prod`, but the list holds `production` and `staging`. What happens?"
+    options:
+      - id: a
+        text: "Perses picks `production` because it is close to `prod`."
+        explanation: "Not correct. Perses does not match names by similarity."
+      - id: b
+        text: "`percli apply` refuses the dashboard."
+        explanation: "Not correct. The check passes. The problem shows when panels run."
+      - id: c
+        text: "The dropdown opens on a value that is not in the list, and the panels are empty."
+        explanation: "Correct. The default must be one of the list values."
+      - id: d
+        text: "The first value of the list is used and nothing looks wrong."
+        explanation: "Not correct. The default is used as written, so the panels are empty."
+    correct_option: c
+    explanation: "Correct. The default must be one of the list values."
+
+  - id: ats107-030-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use matchers in label values variables"
+    source_readings:
+      - sections/section-030/module-01/course-02-variables-from-queries.md
+    prompt: "A `PrometheusLabelValuesVariable` has no `matchers`. What does its list hold?"
+    options:
+      - id: a
+        text: "Nothing. The variable needs matchers to load."
+        explanation: "Not correct. Matchers are optional."
+      - id: b
+        text: "Only values from the default dashboard time range."
+        explanation: "Not correct. The label values call is not limited by the dashboard range here."
+      - id: c
+        text: "Only the values of the first series."
+        explanation: "Not correct. The call returns the values from all series."
+      - id: d
+        text: "Every value the label has on any series, including services that do not send your metric."
+        explanation: "Correct. Matchers limit the list to matching series."
+    correct_option: d
+    explanation: "Correct. Matchers limit the list to matching series."
+
+  - id: ats107-030-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe a DatasourceVariable"
+    source_readings:
+      - sections/section-030/module-01/course-02-variables-from-queries.md
+    prompt: "What does a `DatasourceVariable` list?"
+    options:
+      - id: a
+        text: "The names of the datasources of one kind, set in `datasourcePluginKind`."
+        explanation: "Correct. The reader picks one datasource."
+      - id: b
+        text: "The values of one label in Prometheus."
+        explanation: "Not correct. That is a `PrometheusLabelValuesVariable`."
+      - id: c
+        text: "All dashboards of the project."
+        explanation: "Not correct. It lists datasources, not dashboards."
+      - id: d
+        text: "The Secrets of a project."
+        explanation: "Not correct. Secrets are not listed by this variable."
+    correct_option: a
+    explanation: "Correct. The reader picks one datasource."
+
+  - id: ats107-030-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Make a query follow a datasource variable"
+    source_readings:
+      - sections/section-030/module-01/course-02-variables-from-queries.md
+    prompt: "A variable `prometheus` lets the reader pick a datasource, but the panel does not change. What is the likely cause?"
+    options:
+      - id: a
+        text: "The variable must be listed after the panel."
+        explanation: "Not correct. A variable must come before the variables that use it."
+      - id: b
+        text: "The query still has a fixed datasource instead of `datasource: $prometheus`."
+        explanation: "Correct. Every query that should follow the choice must name the variable."
+      - id: c
+        text: "`allowMultiple` is off."
+        explanation: "Not correct. That setting does not decide which datasource a query uses."
+      - id: d
+        text: "The dashboard `duration` is too short."
+        explanation: "Not correct. The time range does not change the datasource."
+    correct_option: b
+    explanation: "Correct. Every query that should follow the choice must name the variable."
+
+  - id: ats107-030-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the default interpolation formats"
+    source_readings:
+      - sections/section-030/module-01/course-03-formats-and-scopes.md
+    prompt: "Which text does Perses write for `$service` when `checkout` and `payments` are selected, with the default format?"
+    options:
+      - id: a
+        text: "`(checkout|payments)`"
+        explanation: "Correct. Several values use the `prometheus` format, a regular expression group."
+      - id: b
+        text: "`checkout,payments`"
+        explanation: "Not correct. That is the `raw` or `csv` format, the default for one value only."
+      - id: c
+        text: "`[\"checkout\",\"payments\"]`"
+        explanation: "Not correct. That is the `json` format."
+      - id: d
+        text: "`checkout`"
+        explanation: "Not correct. Perses writes all selected values."
+    correct_option: a
+    explanation: "Correct. Several values use the `prometheus` format, a regular expression group."
+
+  - id: ats107-030-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Match multi-value variables with =~"
+    source_readings:
+      - sections/section-030/module-01/course-03-formats-and-scopes.md
+    prompt: "Why does `service_name=\"$service\"` return nothing when two services are selected?"
+    options:
+      - id: a
+        text: "Perses does not write more than one value into a query."
+        explanation: "Not correct. It writes all selected values as a group."
+      - id: b
+        text: "PromQL does not allow quotes around variables."
+        explanation: "Not correct. Quotes are fine. The operator is wrong."
+      - id: c
+        text: "`=` compares exact text, and no service is called `(checkout|payments)`."
+        explanation: "Correct. Use `=~` so the group is read as a regular expression."
+      - id: d
+        text: "The `All` entry is missing from the list."
+        explanation: "Not correct. `All` is not needed to select two values."
+    correct_option: c
+    explanation: "Correct. Use `=~` so the group is read as a regular expression."
+
+  - id: ats107-030-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Apply variable scope precedence"
+    source_readings:
+      - sections/section-030/module-01/course-03-formats-and-scopes.md
+    prompt: "A dashboard, its project and the server all define a variable named `region`. Which definition does the dashboard use?"
+    options:
+      - id: a
+        text: "The `GlobalVariable`, because it applies to everyone."
+        explanation: "Not correct. A global variable is the first to be replaced by a smaller scope."
+      - id: b
+        text: "The dashboard's own variable, because the smallest scope wins."
+        explanation: "Correct. The order is dashboard, then project, then global."
+      - id: c
+        text: "The project `Variable`, because projects own dashboards."
+        explanation: "Not correct. A dashboard variable wins over the project variable."
+      - id: d
+        text: "All three, merged into one list."
+        explanation: "Not correct. Perses uses one definition and does not merge them."
+    correct_option: b
+    explanation: "Correct. The order is dashboard, then project, then global."
+
+  - id: ats107-030-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use customAllValue"
+    source_readings:
+      - sections/section-030/module-01/course-03-formats-and-scopes.md
+    prompt: "A list has `allowAllValue: true` and `customAllValue: .*`. What does Perses write into the query when `All` is selected?"
+    options:
+      - id: a
+        text: "Every value of the list as a group."
+        explanation: "Not correct. That is the default only when `customAllValue` is not set."
+      - id: b
+        text: "An empty string."
+        explanation: "Not correct. The text from `customAllValue` is written."
+      - id: c
+        text: "The word `All`."
+        explanation: "Not correct. `All` is the entry in the dropdown. It is not written into the query."
+      - id: d
+        text: "The text `.*`, which matches every service with `=~`."
+        explanation: "Correct. `customAllValue` replaces the list of every value."
+    correct_option: d
+    explanation: "Correct. `customAllValue` replaces the list of every value."

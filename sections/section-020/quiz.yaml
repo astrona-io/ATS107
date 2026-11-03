@@ -1,0 +1,245 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats107-020
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Metrics, Logs, Traces And Profiles"
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+  - id: ats107-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what a layout item does"
+    source_readings:
+      - sections/section-020/module-01/course-01-metrics-and-the-dashboard-model.md
+    prompt: "What does a layout item with `$ref: \"#/spec/panels/requests\"` do?"
+    options:
+      - id: a
+        text: "It copies the panel `requests` into a new panel."
+        explanation: "Not correct. A `$ref` points at the panel. It does not copy it."
+      - id: b
+        text: "It sets the query of the panel `requests`."
+        explanation: "Not correct. Queries are set in the panel's `queries` list."
+      - id: c
+        text: "It sets the default time range of the dashboard."
+        explanation: "Not correct. The `duration` field does that."
+      - id: d
+        text: "It places the panel with the key `requests` on the grid."
+        explanation: "Correct. A panel that no layout mentions never appears on the dashboard."
+    correct_option: d
+    explanation: "Correct. A panel that no layout mentions never appears on the dashboard."
+
+  - id: ats107-020-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match panel plugins and query kinds"
+    source_readings:
+      - sections/section-020/module-01/course-01-metrics-and-the-dashboard-model.md
+    prompt: "Which query kind fits a `TimeSeriesChart` panel?"
+    options:
+      - id: a
+        text: "`LogQuery`"
+        explanation: "Not correct. That kind feeds a `LogsTable`."
+      - id: b
+        text: "`TraceQuery`"
+        explanation: "Not correct. That kind feeds trace panels."
+      - id: c
+        text: "`TimeSeriesQuery`"
+        explanation: "Correct. A time series chart draws time series."
+      - id: d
+        text: "`ProfileQuery`"
+        explanation: "Not correct. That kind feeds a `FlameChart`."
+    correct_option: c
+    explanation: "Correct. A time series chart draws time series."
+
+  - id: ats107-020-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain default datasource use in queries"
+    source_readings:
+      - sections/section-020/module-01/course-01-metrics-and-the-dashboard-model.md
+    prompt: "A `PrometheusTimeSeriesQuery` has no `datasource` field. Which datasource does it use?"
+    options:
+      - id: a
+        text: "The default `PrometheusDatasource`."
+        explanation: "Correct. An empty field means the default of the kind."
+      - id: b
+        text: "No datasource. The panel stays empty."
+        explanation: "Not correct. Perses falls back to the default of the kind."
+      - id: c
+        text: "The datasource with the smallest name."
+        explanation: "Not correct. Names do not decide. The default flag does."
+      - id: d
+        text: "A datasource of kind `LokiDatasource`."
+        explanation: "Not correct. A Prometheus query needs a Prometheus datasource."
+    correct_option: a
+    explanation: "Correct. An empty field means the default of the kind."
+
+  - id: ats107-020-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what percli apply checks"
+    source_readings:
+      - sections/section-020/module-01/course-01-metrics-and-the-dashboard-model.md
+    prompt: "`percli apply` accepts a dashboard, but one panel is empty. Which cause can still be true?"
+    options:
+      - id: a
+        text: "The YAML has a field that the plugin schema does not know."
+        explanation: "Not correct. Apply would have failed and named the field."
+      - id: b
+        text: "The panel has a wrong type for a required field."
+        explanation: "Not correct. Apply checks types and would have refused the resource."
+      - id: c
+        text: "The dashboard was never saved."
+        explanation: "Not correct. Apply succeeded, so the dashboard exists."
+      - id: d
+        text: "The query uses a label that does not exist in the backend."
+        explanation: "Correct. Apply checks the shape against plugin schemas. It does not run the query."
+    correct_option: d
+    explanation: "Correct. Apply checks the shape against plugin schemas. It does not run the query."
+
+  - id: ats107-020-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Write a LogQL stream selector"
+    source_readings:
+      - sections/section-020/module-01/course-02-logs-from-loki.md
+    prompt: "How does every LogQL query start?"
+    options:
+      - id: a
+        text: "With a line filter, such as `|= \"order\"`."
+        explanation: "Not correct. Line filters come after the selector."
+      - id: b
+        text: "With a stream selector, such as `{service_name=\"checkout\"}`."
+        explanation: "Correct. The selector picks the log streams by their labels."
+      - id: c
+        text: "With the word `SELECT`."
+        explanation: "Not correct. LogQL is not SQL."
+      - id: d
+        text: "With the metric name, such as `app_requests_total`."
+        explanation: "Not correct. Metric names belong to PromQL."
+    correct_option: b
+    explanation: "Correct. The selector picks the log streams by their labels."
+
+  - id: ats107-020-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the plugin for log counts"
+    source_readings:
+      - sections/section-020/module-01/course-02-logs-from-loki.md
+    prompt: "You want a chart of log lines per minute from Loki. Which combination is right?"
+    options:
+      - id: a
+        text: "`LogsTable` with a `LokiLogQuery`."
+        explanation: "Not correct. That shows the log lines, not a count."
+      - id: b
+        text: "`TimeSeriesChart` with a `LokiLogQuery`."
+        explanation: "Not correct. Log lines are not a time series."
+      - id: c
+        text: "`TimeSeriesChart` with a `LokiTimeSeriesQuery` of kind `TimeSeriesQuery`."
+        explanation: "Correct. A count over time is a time series."
+      - id: d
+        text: "`TraceTable` with a `TempoTraceQuery`."
+        explanation: "Not correct. That is for traces from Tempo."
+    correct_option: c
+    explanation: "Correct. A count over time is a time series."
+
+  - id: ats107-020-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Quote LogQL in YAML"
+    source_readings:
+      - sections/section-020/module-01/course-02-logs-from-loki.md
+    prompt: "Why must the query `{service_name=\"checkout\"}` be quoted in a YAML value?"
+    options:
+      - id: a
+        text: "Loki rejects queries that are not quoted."
+        explanation: "Not correct. Loki gets the query text without the YAML quotes."
+      - id: b
+        text: "YAML requires quotes around every string."
+        explanation: "Not correct. Most strings need no quotes. This one starts with `{`."
+      - id: c
+        text: "The quotes make Loki run the query faster."
+        explanation: "Not correct. Quotes in YAML do not affect the query speed."
+      - id: d
+        text: "A value that starts with `{` is read as a map, and `percli apply` fails."
+        explanation: "Correct. Single quotes keep it a string."
+    correct_option: d
+    explanation: "Correct. Single quotes keep it a string."
+
+  - id: ats107-020-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Write a TraceQL condition"
+    source_readings:
+      - sections/section-020/module-01/course-03-traces-and-profiles.md
+    prompt: "Which TraceQL selector finds traces that have spans from the service `checkout`?"
+    options:
+      - id: a
+        text: "`{resource.service.name=\"checkout\"}`"
+        explanation: "Correct. The service name is a resource attribute."
+      - id: b
+        text: "`{service_name=\"checkout\"}`"
+        explanation: "Not correct. That is the Prometheus and Loki label name."
+      - id: c
+        text: "`{span.service.name=\"checkout\"}`"
+        explanation: "Not correct. That looks at span attributes and finds nothing here."
+      - id: d
+        text: "`{service.name=checkout}`"
+        explanation: "Not correct. It has no attribute level and no quotes."
+    correct_option: a
+    explanation: "Correct. The service name is a resource attribute."
+
+  - id: ats107-020-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose a trace panel"
+    source_readings:
+      - sections/section-020/module-01/course-03-traces-and-profiles.md
+    prompt: "Which panel shows what happened inside one trace, given its trace ID?"
+    options:
+      - id: a
+        text: "`TraceTable`"
+        explanation: "Not correct. It lists traces that match a TraceQL search."
+      - id: b
+        text: "`TracingGanttChart`"
+        explanation: "Correct. It draws the spans of a single trace."
+      - id: c
+        text: "`ScatterChart`"
+        explanation: "Not correct. It shows the durations of matching traces over time."
+      - id: d
+        text: "`FlameChart`"
+        explanation: "Not correct. It shows a profile from Pyroscope, not a trace."
+    correct_option: b
+    explanation: "Correct. It draws the spans of a single trace."
+
+  - id: ats107-020-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the FlameChart required fields"
+    source_readings:
+      - sections/section-020/module-01/course-03-traces-and-profiles.md
+    prompt: "A `FlameChart` panel with `spec: {}` is sent to `percli apply`. What happens?"
+    options:
+      - id: a
+        text: "The apply fails and names the missing required fields."
+        explanation: "Correct. This panel has required fields, such as `palette` and `showTable`."
+      - id: b
+        text: "The apply works and the panel uses defaults."
+        explanation: "Not correct. The required fields have no defaults."
+      - id: c
+        text: "The apply works, but the panel stays empty."
+        explanation: "Not correct. Perses checks the panel spec at apply time and refuses it."
+      - id: d
+        text: "The apply fails because Pyroscope is not reachable."
+        explanation: "Not correct. Apply does not contact a backend."
+    correct_option: a
+    explanation: "Correct. This panel has required fields, such as `palette` and `showTable`."

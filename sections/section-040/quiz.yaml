@@ -1,0 +1,245 @@
+# Knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats107-040
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-040
+  title: "Cascading Variables Across Signals"
+placement:
+  position: after
+  reading: sections/section-040/capstone/labs/lab-01/question.md
+questions:
+  - id: ats107-040-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Build the matcher of a cascade"
+    source_readings:
+      - sections/section-040/module-01/course-01-variables-that-depend-on-variables.md
+    prompt: "Which matcher makes the `service` list depend on the selected environment?"
+    options:
+      - id: a
+        text: "`app_requests_total`"
+        explanation: "Not correct. That lists the services of every environment."
+      - id: b
+        text: "`app_requests_total{service_name=\"$service\"}`"
+        explanation: "Not correct. A variable cannot depend on itself."
+      - id: c
+        text: "`deployment_environment`"
+        explanation: "Not correct. That is a label name, not a series selector."
+      - id: d
+        text: "`app_requests_total{deployment_environment=\"$env\"}`"
+        explanation: "Correct. The `$env` value narrows the series, so only services of that environment appear."
+    correct_option: d
+    explanation: "Correct. The `$env` value narrows the series, so only services of that environment appear."
+
+  - id: ats107-040-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Order variables in a cascade"
+    source_readings:
+      - sections/section-040/module-01/course-01-variables-that-depend-on-variables.md
+    prompt: "Where must the variable `env` sit in `spec.variables` when `service` uses `$env`?"
+    options:
+      - id: a
+        text: "Before `service`."
+        explanation: "Correct. Perses resolves variables in list order."
+      - id: b
+        text: "After `service`."
+        explanation: "Not correct. `$env` would have no value when the service list loads."
+      - id: c
+        text: "In the panel instead of the list."
+        explanation: "Not correct. Variables belong in `spec.variables`."
+      - id: d
+        text: "Anywhere. The order is not used."
+        explanation: "Not correct. The order decides the order of the work."
+    correct_option: a
+    explanation: "Correct. Perses resolves variables in list order."
+
+  - id: ats107-040-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Predict a cascade result"
+    source_readings:
+      - sections/section-040/module-01/course-01-variables-that-depend-on-variables.md
+    prompt: "The service `payments` only runs in `production`. What does the `service` list hold when `staging` is selected?"
+    options:
+      - id: a
+        text: "`checkout` and `payments`."
+        explanation: "Not correct. That is the list for `production`."
+      - id: b
+        text: "Only `checkout`."
+        explanation: "Correct. Only `checkout` has series in `staging`."
+      - id: c
+        text: "Nothing. The list is empty."
+        explanation: "Not correct. `checkout` runs in `staging`."
+      - id: d
+        text: "Only `payments`."
+        explanation: "Not correct. `payments` has no series in `staging`."
+    correct_option: b
+    explanation: "Correct. Only `checkout` has series in `staging`."
+
+  - id: ats107-040-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what happens when env changes"
+    source_readings:
+      - sections/section-040/module-01/course-01-variables-that-depend-on-variables.md
+    prompt: "The reader changes `env` from `production` to `staging`. What does Perses do?"
+    options:
+      - id: a
+        text: "It loads the `service` values again with the new environment."
+        explanation: "Correct. It repeats the work from `service` on."
+      - id: b
+        text: "It keeps the old `service` list."
+        explanation: "Not correct. The list would then offer pairs that do not exist."
+      - id: c
+        text: "It reloads the page and clears all variables."
+        explanation: "Not correct. Perses updates the dependent variables only."
+      - id: d
+        text: "It sends the old value to the panels."
+        explanation: "Not correct. Panels get the new selection."
+    correct_option: a
+    explanation: "Correct. It repeats the work from `service` on."
+
+  - id: ats107-040-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the Loki label for the service"
+    source_readings:
+      - sections/section-040/module-01/course-02-one-value-three-query-languages.md
+    prompt: "Which label selects the service `payments` in a LogQL query?"
+    options:
+      - id: a
+        text: "`service.name`"
+        explanation: "Not correct. Loki label names cannot contain dots."
+      - id: b
+        text: "`resource.service.name`"
+        explanation: "Not correct. That is the TraceQL form."
+      - id: c
+        text: "`service_name`"
+        explanation: "Correct. Loki replaces the dot of `service.name` with an underscore."
+      - id: d
+        text: "`service`"
+        explanation: "Not correct. The label is `service_name`."
+    correct_option: c
+    explanation: "Correct. Loki replaces the dot of `service.name` with an underscore."
+
+  - id: ats107-040-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the Tempo label for the environment"
+    source_readings:
+      - sections/section-040/module-01/course-02-one-value-three-query-languages.md
+    prompt: "Which TraceQL attribute holds the environment?"
+    options:
+      - id: a
+        text: "`deployment_environment`"
+        explanation: "Not correct. That is the Prometheus and Loki label."
+      - id: b
+        text: "`resource.deployment.environment`"
+        explanation: "Correct. Tempo keeps the dots and adds the `resource.` level."
+      - id: c
+        text: "`span.deployment.environment`"
+        explanation: "Not correct. The environment is a resource attribute, not a span attribute."
+      - id: d
+        text: "`environment`"
+        explanation: "Not correct. The attribute name is `deployment.environment`."
+    correct_option: b
+    explanation: "Correct. Tempo keeps the dots and adds the `resource.` level."
+
+  - id: ats107-040-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Join TraceQL conditions"
+    source_readings:
+      - sections/section-040/module-01/course-02-one-value-three-query-languages.md
+    prompt: "How do you join two conditions inside one TraceQL selector?"
+    options:
+      - id: a
+        text: "With a comma."
+        explanation: "Not correct. PromQL and LogQL use commas. TraceQL does not."
+      - id: b
+        text: "With the word `and` in quotes."
+        explanation: "Not correct. TraceQL has the `&&` operator."
+      - id: c
+        text: "With a semicolon."
+        explanation: "Not correct. A semicolon is not an operator in TraceQL."
+      - id: d
+        text: "With `&&`."
+        explanation: "Correct. TraceQL uses `&&` for AND."
+    correct_option: d
+    explanation: "Correct. TraceQL uses `&&` for AND."
+
+  - id: ats107-040-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the wrong level in TraceQL"
+    source_readings:
+      - sections/section-040/module-01/course-02-one-value-three-query-languages.md
+    prompt: "A traces panel stays empty and its query uses `span.service.name=\"payments\"`. What is wrong?"
+    options:
+      - id: a
+        text: "TraceQL does not support service names."
+        explanation: "Not correct. It does, at the resource level."
+      - id: b
+        text: "The condition needs a comma at the end."
+        explanation: "Not correct. A comma is not used in TraceQL."
+      - id: c
+        text: "The service name is a resource attribute, so it needs `resource.service.name`."
+        explanation: "Correct. The `span.` level finds nothing here."
+      - id: d
+        text: "The panel needs a `LokiLogQuery`."
+        explanation: "Not correct. Traces come from Tempo, with a `TempoTraceQuery`."
+    correct_option: c
+    explanation: "Correct. The `span.` level finds nothing here."
+
+  - id: ats107-040-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Locate a failing panel"
+    source_readings:
+      - sections/section-040/module-01/course-02-one-value-three-query-languages.md
+    prompt: "Two panels show data and the third is empty. What is the most likely cause?"
+    options:
+      - id: a
+        text: "The third query names a label that its backend does not have."
+        explanation: "Correct. The selection reached all three, so the label name is the likely fault."
+      - id: b
+        text: "The variables are not loaded."
+        explanation: "Not correct. The other two panels use the same variables and show data."
+      - id: c
+        text: "The cascade is in the wrong order."
+        explanation: "Not correct. A wrong order would affect all panels."
+      - id: d
+        text: "The dashboard has no layout."
+        explanation: "Not correct. A panel in the layout is shown. The two others are."
+    correct_option: a
+    explanation: "Correct. The selection reached all three, so the label name is the likely fault."
+
+  - id: ats107-040-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Handle a multi-value parent in a cascade"
+    source_readings:
+      - sections/section-040/module-01/course-01-variables-that-depend-on-variables.md
+    prompt: "`env` allows several values. How must the matcher of `service` change?"
+    options:
+      - id: a
+        text: "It stays `deployment_environment=\"$env\"`."
+        explanation: "Not correct. `=` compares exact text and the group would match nothing."
+      - id: b
+        text: "It must drop the label matcher."
+        explanation: "Not correct. Without it the list ignores the environment."
+      - id: c
+        text: "It must use `deployment_environment!=\"$env\"`."
+        explanation: "Not correct. That excludes the selected environments."
+      - id: d
+        text: "It needs `deployment_environment=~\"$env\"`."
+        explanation: "Correct. Several values are written as a regular expression group, so `=~` is needed."
+    correct_option: d
+    explanation: "Correct. Several values are written as a regular expression group, so `=~` is needed."

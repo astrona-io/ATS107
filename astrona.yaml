@@ -128,6 +128,10 @@ modules:
             url: https://perses.dev/perses/docs/api/secret/
           - name: "Tempo HTTP API"
             url: https://grafana.com/docs/tempo/latest/api_docs/
+      - type: quiz
+        title: "Knowledge Check: Datasources And Their Scopes"
+        path: sections/section-010/quiz.yaml
+        pass_score: 70
 
   - id: module-020
     title: "Metrics, Logs, Traces And Profiles"
@@ -199,6 +203,10 @@ modules:
             url: https://perses.dev/perses/docs/concepts/dashboard/
           - name: "LogQL"
             url: https://grafana.com/docs/loki/latest/query/
+      - type: quiz
+        title: "Knowledge Check: Metrics, Logs, Traces And Profiles"
+        path: sections/section-020/quiz.yaml
+        pass_score: 70
 
   - id: module-030
     title: "Dashboard Variables"
@@ -268,6 +276,10 @@ modules:
             url: https://perses.dev/perses/docs/concepts/variable/
           - name: "Datasource and variable scopes"
             url: https://perses.dev/perses/docs/concepts/datasource-and-variable-scopes/
+      - type: quiz
+        title: "Knowledge Check: Dashboard Variables"
+        path: sections/section-030/quiz.yaml
+        pass_score: 70
 
   - id: module-040
     title: "Cascading Variables Across Signals"
@@ -336,3 +348,11 @@ modules:
             url: https://perses.dev/perses/docs/concepts/variable/
           - name: "TraceQL"
             url: https://grafana.com/docs/tempo/latest/traceql/
+      - type: quiz
+        title: "Knowledge Check: Cascading Variables Across Signals"
+        path: sections/section-040/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Final Domain Quiz"
+        path: sections/final-domain-quiz.yaml
+        pass_score: 70

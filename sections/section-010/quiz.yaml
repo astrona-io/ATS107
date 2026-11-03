@@ -1,0 +1,245 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats107-010
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Datasources And Their Scopes"
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+  - id: ats107-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the three datasource scopes"
+    source_readings:
+      - sections/section-010/module-01/course-01-datasources-and-scopes.md
+    prompt: "Which resource makes a datasource usable by every dashboard in every project?"
+    options:
+      - id: a
+        text: "A `GlobalDatasource`."
+        explanation: "Correct. The global scope covers all projects."
+      - id: b
+        text: "A `Datasource` with `metadata.project` set."
+        explanation: "Not correct. That is a project datasource. Only dashboards of that project can use it."
+      - id: c
+        text: "An entry in the `spec.datasources` of one dashboard."
+        explanation: "Not correct. That scope covers only that one dashboard."
+      - id: d
+        text: "A `Secret` in the project."
+        explanation: "Not correct. A Secret holds credentials. It is not a datasource."
+    correct_option: a
+    explanation: "Correct. The global scope covers all projects."
+
+  - id: ats107-010-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain how a query picks a datasource"
+    source_readings:
+      - sections/section-010/module-01/course-01-datasources-and-scopes.md
+    prompt: "A Prometheus query sets `datasource.kind: PrometheusDatasource` and no `name`. Which datasource does Perses use?"
+    options:
+      - id: a
+        text: "The first datasource of that kind in alphabetical order."
+        explanation: "Not correct. Perses does not sort by name. It looks for the default flag."
+      - id: b
+        text: "None. Perses rejects the query because the name is missing."
+        explanation: "Not correct. A missing name is allowed. It selects the default."
+      - id: c
+        text: "The datasource of that kind with `default: true`."
+        explanation: "Correct. With no name, Perses uses the default of the kind."
+      - id: d
+        text: "Every datasource of that kind, with the results merged."
+        explanation: "Not correct. A query goes to one datasource."
+    correct_option: c
+    explanation: "Correct. With no name, Perses uses the default of the kind."
+
+  - id: ats107-010-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Apply the smallest-scope-wins rule"
+    source_readings:
+      - sections/section-010/module-01/course-01-datasources-and-scopes.md
+    prompt: "A `GlobalDatasource` named `prometheus` and a project `Datasource` named `prometheus` in `inventory` both exist. A dashboard in `inventory` asks for `prometheus`. Which one answers?"
+    options:
+      - id: a
+        text: "The `GlobalDatasource`, because it was created first."
+        explanation: "Not correct. Creation order does not matter. Scope decides."
+      - id: b
+        text: "The project `Datasource`, because the smallest scope wins."
+        explanation: "Correct. A project datasource overrides the global one of the same name for that project."
+      - id: c
+        text: "Neither. Perses reports that the name is ambiguous."
+        explanation: "Not correct. Perses has a fixed rule for equal names, so there is no error."
+      - id: d
+        text: "Both, and Perses merges the answers."
+        explanation: "Not correct. A query goes to exactly one datasource."
+    correct_option: b
+    explanation: "Correct. A project datasource overrides the global one of the same name for that project."
+
+  - id: ats107-010-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "List datasources with percli"
+    source_readings:
+      - sections/section-010/module-01/course-01-datasources-and-scopes.md
+    prompt: "Which command lists the global datasources?"
+    options:
+      - id: a
+        text: "`percli get dts`"
+        explanation: "Not correct. That lists the project datasources of the selected project only."
+      - id: b
+        text: "`percli get globals`"
+        explanation: "Not correct. `globals` is not a resource name that percli accepts."
+      - id: c
+        text: "`percli describe dts`"
+        explanation: "Not correct. `describe` shows one resource. It needs a name and lists nothing."
+      - id: d
+        text: "`percli get gdts`"
+        explanation: "Correct. `gdts` is the short name of `globaldatasource`."
+    correct_option: d
+    explanation: "Correct. `gdts` is the short name of `globaldatasource`."
+
+  - id: ats107-010-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe the role of the Perses proxy"
+    source_readings:
+      - sections/section-010/module-01/course-02-the-proxy-and-allowed-endpoints.md
+    prompt: "A browser cannot reach `http://prometheus.observability:9090`, yet a dashboard shows its data. Why?"
+    options:
+      - id: a
+        text: "The browser sends the query directly to Prometheus through the cluster network."
+        explanation: "Not correct. That is `directUrl`. It would fail here because the name only exists inside the cluster."
+      - id: b
+        text: "Perses copies the Prometheus data into its own database."
+        explanation: "Not correct. Perses stores no copy. It forwards each query."
+      - id: c
+        text: "The browser sends the query to the Perses server, and the server forwards it to Prometheus."
+        explanation: "Correct. Only the Perses server talks to the backend."
+      - id: d
+        text: "The `percli` tool opens a tunnel for each panel."
+        explanation: "Not correct. `percli` manages resources. It is not part of a panel query."
+    correct_option: c
+    explanation: "Correct. Only the Perses server talks to the backend."
+
+  - id: ats107-010-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Build a proxy path"
+    source_readings:
+      - sections/section-010/module-01/course-02-the-proxy-and-allowed-endpoints.md
+    prompt: "What is the proxy path for the backend path `/loki/api/v1/labels` of the project datasource `loki` in the project `inventory`?"
+    options:
+      - id: a
+        text: "`/proxy/projects/inventory/datasources/loki/loki/api/v1/labels`"
+        explanation: "Correct. The project prefix is followed by the backend's own path."
+      - id: b
+        text: "`/proxy/globaldatasources/loki/loki/api/v1/labels`"
+        explanation: "Not correct. That path is for the global datasource."
+      - id: c
+        text: "`/proxy/projects/inventory/datasources/loki/api/v1/labels`"
+        explanation: "Not correct. It drops the leading `loki` of the backend path."
+      - id: d
+        text: "`/proxy/datasources/inventory/loki/loki/api/v1/labels`"
+        explanation: "Not correct. This prefix does not exist in Perses."
+    correct_option: a
+    explanation: "Correct. The project prefix is followed by the backend's own path."
+
+  - id: ats107-010-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain allowedEndpoints"
+    source_readings:
+      - sections/section-010/module-01/course-02-the-proxy-and-allowed-endpoints.md
+    prompt: "What does a set `allowedEndpoints` list do?"
+    options:
+      - id: a
+        text: "It encrypts the requests that match an entry."
+        explanation: "Not correct. The list filters paths. It does not encrypt."
+      - id: b
+        text: "It marks the datasource as the default of its kind."
+        explanation: "Not correct. The `default` field does that."
+      - id: c
+        text: "It lists the dashboards allowed to use the datasource."
+        explanation: "Not correct. It lists backend paths, not dashboards."
+      - id: d
+        text: "The proxy forwards only requests that match a method and path pattern in the list, and refuses the rest."
+        explanation: "Correct. The list closes the proxy to every other path."
+    correct_option: d
+    explanation: "Correct. The list closes the proxy to every other path."
+
+  - id: ats107-010-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell a proxy refusal from a backend refusal"
+    source_readings:
+      - sections/section-010/module-01/course-02-the-proxy-and-allowed-endpoints.md
+    prompt: "A request through the `loki` proxy returns `401`, and its path is on `allowedEndpoints`. Who refused it?"
+    options:
+      - id: a
+        text: "The Perses proxy, because the path is not allowed."
+        explanation: "Not correct. The path is on the list, so Perses forwarded it."
+      - id: b
+        text: "The backend gateway, because the request carried no credentials."
+        explanation: "Correct. Perses forwarded the request. The gateway then asked for a user and a password."
+      - id: c
+        text: "The browser, because it blocked the request."
+        explanation: "Not correct. The request came from `curl` through Perses. A browser did not refuse it."
+      - id: d
+        text: "Loki itself, because the query was invalid."
+        explanation: "Not correct. An invalid query gives a different status. A `401` means missing credentials."
+    correct_option: b
+    explanation: "Correct. Perses forwarded the request. The gateway then asked for a user and a password."
+
+  - id: ats107-010-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the Secret kind for a scope"
+    source_readings:
+      - sections/section-010/module-01/course-03-secrets-for-datasources.md
+    prompt: "Which Secret can a project `Datasource` use?"
+    options:
+      - id: a
+        text: "A `GlobalSecret`."
+        explanation: "Not correct. A GlobalSecret fits only a `GlobalDatasource`."
+      - id: b
+        text: "A `Secret` in any other project."
+        explanation: "Not correct. The Secret must be in the same project."
+      - id: c
+        text: "A `Secret` in the same project."
+        explanation: "Correct. The scope of the Secret must match the datasource."
+      - id: d
+        text: "Only a Secret stored inside the datasource spec."
+        explanation: "Not correct. The datasource holds a name that points to a separate Secret."
+    correct_option: c
+    explanation: "Correct. The scope of the Secret must match the datasource."
+
+  - id: ats107-010-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Keep credentials out of datasource headers"
+    source_readings:
+      - sections/section-010/module-01/course-03-secrets-for-datasources.md
+    prompt: "Why does the course reject an `Authorization` header in the proxy `headers` field?"
+    options:
+      - id: a
+        text: "Proxy headers are never sent to the backend."
+        explanation: "Not correct. They are sent. That is why the password would work, and why it leaks."
+      - id: b
+        text: "Basic authentication cannot be written as a header."
+        explanation: "Not correct. It can. The problem is who can read it."
+      - id: c
+        text: "Headers make the datasource slower."
+        explanation: "Not correct. Speed is not the reason. Access to the password is."
+      - id: d
+        text: "Anyone who can read the datasource can read the password."
+        explanation: "Correct. A Secret is a separate resource with its own permissions."
+    correct_option: d
+    explanation: "Correct. A Secret is a separate resource with its own permissions."
