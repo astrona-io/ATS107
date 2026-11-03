@@ -1,0 +1,193 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "explorer",
+    "project": "inventory"
+  },
+  "spec": {
+    "display": {
+      "name": "Explorer"
+    },
+    "duration": "1h",
+    "variables": [
+      {
+        "kind": "ListVariable",
+        "spec": {
+          "name": "env",
+          "display": {
+            "name": "Environment",
+            "hidden": false
+          },
+          "allowAllValue": true,
+          "customAllValue": ".*",
+          "allowMultiple": true,
+          "defaultValue": "$__all",
+          "sort": "alphabetical-asc",
+          "plugin": {
+            "kind": "PrometheusLabelValuesVariable",
+            "spec": {
+              "labelName": "deployment_environment",
+              "matchers": [
+                "app_requests_total"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "kind": "ListVariable",
+        "spec": {
+          "name": "service",
+          "display": {
+            "name": "Service",
+            "hidden": false
+          },
+          "allowAllValue": true,
+          "customAllValue": ".*",
+          "allowMultiple": true,
+          "defaultValue": "$__all",
+          "sort": "alphabetical-asc",
+          "plugin": {
+            "kind": "PrometheusLabelValuesVariable",
+            "spec": {
+              "labelName": "service_name",
+              "matchers": [
+                "app_requests_total{deployment_environment=~\"$env\"}"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "kind": "TextVariable",
+        "spec": {
+          "name": "search",
+          "display": {
+            "name": "Search",
+            "hidden": false
+          },
+          "value": "order",
+          "constant": false
+        }
+      },
+      {
+        "kind": "ListVariable",
+        "spec": {
+          "name": "slower",
+          "display": {
+            "name": "Slower than",
+            "hidden": false
+          },
+          "allowAllValue": false,
+          "allowMultiple": false,
+          "defaultValue": "0ms",
+          "plugin": {
+            "kind": "StaticListVariable",
+            "spec": {
+              "values": [
+                {
+                  "value": "0ms",
+                  "label": "Any duration"
+                },
+                {
+                  "value": "10ms",
+                  "label": "10 milliseconds"
+                },
+                {
+                  "value": "100ms",
+                  "label": "100 milliseconds"
+                },
+                {
+                  "value": "1s",
+                  "label": "1 second"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "panels": {
+      "logs": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Logs"
+          },
+          "plugin": {
+            "kind": "LogsTable",
+            "spec": {
+              "showTime": true
+            }
+          },
+          "queries": [
+            {
+              "kind": "LogQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "LokiLogQuery",
+                  "spec": {
+                    "query": "{deployment_environment=~\"$env\", service_name=~\"$service\"} |= \"$search\""
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "traces": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Traces"
+          },
+          "plugin": {
+            "kind": "TraceTable",
+            "spec": {}
+          },
+          "queries": [
+            {
+              "kind": "TraceQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "TempoTraceQuery",
+                  "spec": {
+                    "query": "{resource.deployment.environment =~ \"$env\" && resource.service.name =~ \"$service\" && duration > $slower}",
+                    "limit": 20
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 10,
+              "content": {
+                "$ref": "#/spec/panels/logs"
+              }
+            },
+            {
+              "x": 0,
+              "y": 10,
+              "width": 24,
+              "height": 10,
+              "content": {
+                "$ref": "#/spec/panels/traces"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

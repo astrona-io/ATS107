@@ -1,0 +1,245 @@
+# Knowledge check for module 010-02. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats107-010-02
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: module-010-02
+  title: "Tune And Scope Datasources"
+placement:
+  position: after
+  reading: sections/section-010/module-02/course-05-summary.md
+questions:
+  - id: ats107-010-02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose between proxy and directUrl"
+    source_readings:
+      - sections/section-010/module-02/course-01-prometheus-datasource-settings.md
+    prompt: "A datasource must use a Secret and an `allowedEndpoints` list. Which field must it use?"
+    options:
+      - id: a
+        text: "`directUrl`"
+        explanation: "Not correct. With `directUrl` the browser calls the backend itself, so Perses cannot add credentials or restrict paths."
+      - id: b
+        text: "`proxy`"
+        explanation: "Correct. Only the proxy block lets the Perses server add credentials and restrict paths."
+      - id: c
+        text: "Both `proxy` and `directUrl`"
+        explanation: "Not correct. A datasource has exactly one of the two fields."
+      - id: d
+        text: "Neither; they are set on the project"
+        explanation: "Not correct. Both settings belong to the datasource itself."
+    correct_option: b
+    explanation: "Correct. Only the proxy block lets the Perses server add credentials and restrict paths."
+
+  - id: ats107-010-02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain scrapeInterval"
+    source_readings:
+      - sections/section-010/module-02/course-01-prometheus-datasource-settings.md
+    prompt: "What does `scrapeInterval` on a `PrometheusDatasource` change?"
+    options:
+      - id: a
+        text: "How often Perses refreshes the dashboard"
+        explanation: "Not correct. Refreshing is set on the dashboard."
+      - id: b
+        text: "The smallest step of a range query, matching how often Prometheus scrapes"
+        explanation: "Correct. Perses uses it so a chart does not ask for points closer together than the data."
+      - id: c
+        text: "How long Prometheus keeps its data"
+        explanation: "Not correct. Retention is a Prometheus setting."
+      - id: d
+        text: "The timeout of each request"
+        explanation: "Not correct. A timeout is sent with `queryParams`, not `scrapeInterval`."
+    correct_option: b
+    explanation: "Correct. Perses uses it so a chart does not ask for points closer together than the data."
+
+  - id: ats107-010-02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the right value format"
+    source_readings:
+      - sections/section-010/module-02/course-01-prometheus-datasource-settings.md
+    prompt: "Which `scrapeInterval` value does `percli apply` accept?"
+    options:
+      - id: a
+        text: "`30 seconds`"
+        explanation: "Not correct. The value must match the duration pattern, such as `30s`."
+      - id: b
+        text: "`30`"
+        explanation: "Not correct. A number without a unit does not match the pattern."
+      - id: c
+        text: "`30s`"
+        explanation: "Correct. A duration is written as numbers with units, such as `30s` or `1m30s`."
+      - id: d
+        text: "`PT30S`"
+        explanation: "Not correct. That is a different duration format that Perses does not use here."
+    correct_option: c
+    explanation: "Correct. A duration is written as numbers with units, such as `30s` or `1m30s`."
+
+  - id: ats107-010-02-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say where credentials belong"
+    source_readings:
+      - sections/section-010/module-02/course-01-prometheus-datasource-settings.md
+    prompt: "Where should a password for a backend be stored?"
+    options:
+      - id: a
+        text: "In the datasource `headers` map"
+        explanation: "Not correct. Headers sit in plain text next to every other setting."
+      - id: b
+        text: "In `queryParams`"
+        explanation: "Not correct. Query parameters are also stored in plain text and can end up in logs."
+      - id: c
+        text: "In the dashboard description"
+        explanation: "Not correct. A description is shown to every reader."
+      - id: d
+        text: "In a Secret that the datasource references"
+        explanation: "Correct. A Secret is a separate resource with its own permissions."
+    correct_option: d
+    explanation: "Correct. A Secret is a separate resource with its own permissions."
+
+  - id: ats107-010-02-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the path of a Loki request"
+    source_readings:
+      - sections/section-010/module-02/course-02-loki-tempo-pyroscope-datasources.md
+    prompt: "A project datasource `loki-direct` points at `http://loki.observability:3100`. Which proxy path asks for the label names?"
+    options:
+      - id: a
+        text: "`/proxy/projects/inventory/datasources/loki-direct/loki/api/v1/labels`"
+        explanation: "Correct. The datasource name is followed by Loki's own path, which starts with `/loki/api/v1`."
+      - id: b
+        text: "`/proxy/projects/inventory/datasources/loki-direct/api/v1/labels`"
+        explanation: "Not correct. That is the Prometheus path. Loki's path starts with `/loki`."
+      - id: c
+        text: "`/proxy/globaldatasources/loki-direct/loki/api/v1/labels`"
+        explanation: "Not correct. That is the global scope; `loki-direct` is a project datasource."
+      - id: d
+        text: "`/proxy/loki-direct/labels`"
+        explanation: "Not correct. No such proxy path exists."
+    correct_option: a
+    explanation: "Correct. The datasource name is followed by Loki's own path, which starts with `/loki/api/v1`."
+
+  - id: ats107-010-02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the extra Pyroscope field"
+    source_readings:
+      - sections/section-010/module-02/course-02-loki-tempo-pyroscope-datasources.md
+    prompt: "Which datasource kind has the optional field `minStep`?"
+    options:
+      - id: a
+        text: "`LokiDatasource`"
+        explanation: "Not correct. Loki has no fields beyond `proxy` or `directUrl`."
+      - id: b
+        text: "`TempoDatasource`"
+        explanation: "Not correct. Tempo has no fields beyond `proxy` or `directUrl`."
+      - id: c
+        text: "`PrometheusDatasource`"
+        explanation: "Not correct. Prometheus uses `scrapeInterval`, `queryParams` and `exemplars`."
+      - id: d
+        text: "`PyroscopeDatasource`"
+        explanation: "Correct. `minStep` is the smallest time step of profile time series."
+    correct_option: d
+    explanation: "Correct. `minStep` is the smallest time step of profile time series."
+
+  - id: ats107-010-02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Connect paths to allowedEndpoints"
+    source_readings:
+      - sections/section-010/module-02/course-02-loki-tempo-pyroscope-datasources.md
+    prompt: "A Tempo datasource allows only `GET /api/search`. What happens to a request for one trace by its ID?"
+    options:
+      - id: a
+        text: "It is forwarded, because it is a `GET`"
+        explanation: "Not correct. The path must match an entry too, not only the method."
+      - id: b
+        text: "The Perses server refuses it, because its path is not on the list"
+        explanation: "Correct. A request that matches no entry is refused before it reaches Tempo."
+      - id: c
+        text: "Tempo refuses it with `401`"
+        explanation: "Not correct. The request never reaches Tempo."
+      - id: d
+        text: "It is rewritten to a search request"
+        explanation: "Not correct. The proxy never rewrites paths."
+    correct_option: b
+    explanation: "Correct. A request that matches no entry is refused before it reaches Tempo."
+
+  - id: ats107-010-02-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find a dashboard datasource"
+    source_readings:
+      - sections/section-010/module-02/course-03-datasources-inside-a-dashboard.md
+    prompt: "Where does Perses store a datasource that belongs to one dashboard?"
+    options:
+      - id: a
+        text: "In the field `spec.datasources` of the dashboard"
+        explanation: "Correct. The field is a map from datasource name to a `default` flag and a `plugin`."
+      - id: b
+        text: "In a project `Datasource` with the dashboard's name"
+        explanation: "Not correct. That would be visible to every dashboard of the project."
+      - id: c
+        text: "In a `GlobalDatasource` with a label"
+        explanation: "Not correct. A global datasource is visible to every project."
+      - id: d
+        text: "In the panel's `plugin` block"
+        explanation: "Not correct. A panel selects a datasource; it does not store one."
+    correct_option: a
+    explanation: "Correct. The field is a map from datasource name to a `default` flag and a `plugin`."
+
+  - id: ats107-010-02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Call a dashboard datasource"
+    source_readings:
+      - sections/section-010/module-02/course-03-datasources-inside-a-dashboard.md
+    prompt: "Which proxy path reaches the datasource `reports-prometheus` of the dashboard `reports` in the project `inventory`?"
+    options:
+      - id: a
+        text: "`/proxy/projects/inventory/datasources/reports-prometheus/`"
+        explanation: "Not correct. That path is for a project datasource."
+      - id: b
+        text: "`/proxy/globaldatasources/reports-prometheus/`"
+        explanation: "Not correct. That path is for a global datasource."
+      - id: c
+        text: "`/proxy/projects/inventory/dashboards/reports/datasources/reports-prometheus/`"
+        explanation: "Correct. The path names the project, the dashboard and the datasource."
+      - id: d
+        text: "`/proxy/dashboards/reports/reports-prometheus/`"
+        explanation: "Not correct. No such proxy path exists."
+    correct_option: c
+    explanation: "Correct. The path names the project, the dashboard and the datasource."
+
+  - id: ats107-010-02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell who refused a request"
+    source_readings:
+      - sections/section-010/module-02/course-04-find-out-why-a-datasource-fails.md
+    prompt: "A request through the proxy returns `401`. Who refused it?"
+    options:
+      - id: a
+        text: "The backend, which received the request without valid credentials"
+        explanation: "Correct. The request matched the proxy rules and arrived; the backend asked for credentials."
+      - id: b
+        text: "The Perses server, because the path is not in `allowedEndpoints`"
+        explanation: "Not correct. That kind of refusal never reaches the backend, so the backend cannot send `401`."
+      - id: c
+        text: "The browser, because of a missing cookie"
+        explanation: "Not correct. The browser is not part of the proxy hop."
+      - id: d
+        text: "The dashboard, because a variable is empty"
+        explanation: "Not correct. A dashboard does not send HTTP status codes."
+    correct_option: a
+    explanation: "Correct. The request matched the proxy rules and arrived; the backend asked for credentials."

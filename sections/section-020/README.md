@@ -17,7 +17,7 @@ This section builds that dashboard one signal at a time. It starts with the dash
 
 ## The learning path
 
-The section has one module with a landing page, three parts, a graded lab right after the third part, and a summary. The landing page starts the module's playground.
+The section has three modules. Each has a landing page, several short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
 
 ### 1. Show Metrics, Logs, Traces And Profiles
 
@@ -28,9 +28,29 @@ The playground holds Perses with a default global datasource for each backend, a
 3. Traces From Tempo And Profiles From Pyroscope, followed by the lab **Build A Dashboard For Four Signals**
 4. Summary
 
+### 2. Show Single Numbers, Gauges And Bars
+
+The playground holds Perses with a default global datasource for each backend, and telemetry for `checkout` and `payments`.
+
+1. Stat Charts, Calculations And Units
+2. Gauges And Thresholds
+3. Bar Charts, Pie Charts And Tables, followed by the lab **Build A Numbers Dashboard**
+4. Markdown Panels And Instant Queries
+5. Summary
+
+### 3. Tune Time Series, Layouts And Dashboard Files
+
+The playground holds Perses with a default global datasource for each backend, and telemetry for `checkout` and `payments`.
+
+1. Time Series Chart Options
+2. Grid Layouts And Panel Groups
+3. Time Range And Refresh
+4. Dashboards As Files, followed by the lab **Tune A Traffic Dashboard**
+5. Summary
+
 ## Section capstone: Repair A Dashboard That Shows Nothing
 
-The capstone is one graded scenario that combines the module. The dashboard `signals` of the project `inventory` was copied from another team and shows almost nothing. Each empty panel has a different cause. Work it after the module lab.
+The capstone is one graded scenario that combines the modules. The dashboard `signals` of the project `inventory` was copied from another team and shows almost nothing. Each empty panel has a different cause. Work it after the module labs.
 
 Start the capstone:
 

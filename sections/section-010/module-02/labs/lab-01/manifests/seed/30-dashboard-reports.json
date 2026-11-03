@@ -1,0 +1,63 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "reports",
+    "project": "inventory"
+  },
+  "spec": {
+    "display": {
+      "name": "Reports"
+    },
+    "duration": "1h",
+    "variables": [],
+    "panels": {
+      "requests": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Requests per second"
+          },
+          "plugin": {
+            "kind": "TimeSeriesChart",
+            "spec": {}
+          },
+          "queries": [
+            {
+              "kind": "TimeSeriesQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "PrometheusTimeSeriesQuery",
+                  "spec": {
+                    "datasource": {
+                      "kind": "PrometheusDatasource",
+                      "name": "reports-prometheus"
+                    },
+                    "query": "sum by (service_name) (rate(app_requests_total[5m]))"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/requests"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

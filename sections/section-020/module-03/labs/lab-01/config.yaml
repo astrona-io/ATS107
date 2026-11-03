@@ -1,0 +1,67 @@
+# Tune A Traffic Dashboard
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-107-lab-020-03"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, percli, the observability stack and Perses v0.54.0"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-107-lab-020-03-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The observability stack"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses answers and telemetry has arrived"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-panel-options"
+      description: "Confirms the panel rate has the table legend, axis unit, area and threshold"
+      type: "file"
+      source: "validation/validate-panel-options.sh"
+    - name: "validate-details-group"
+      description: "Confirms by-env is in a closed group titled Details and rate keeps its place"
+      type: "file"
+      source: "validation/validate-details-group.sh"
+    - name: "validate-time-defaults"
+      description: "Confirms duration 6h and refreshInterval 30s"
+      type: "file"
+      source: "validation/validate-time-defaults.sh"
+    - name: "validate-data-and-layout"
+      description: "Confirms every panel is placed and every query returns data"
+      type: "file"
+      source: "validation/validate-data-and-layout.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - docker.io/persesdev/perses:v0.54.0
+      - ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+      - grafana/loki:3.7.9
+      - grafana/pyroscope:2.4.1
+      - grafana/tempo:2.10.10
+      - nginx:1.27-alpine
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1

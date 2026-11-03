@@ -1,0 +1,42 @@
+{
+  "kind": "GlobalDatasource",
+  "metadata": {
+    "name": "loki"
+  },
+  "spec": {
+    "default": true,
+    "plugin": {
+      "kind": "LokiDatasource",
+      "spec": {
+        "proxy": {
+          "kind": "HTTPProxy",
+          "spec": {
+            "url": "http://loki-gateway.observability",
+            "allowedEndpoints": [
+              {
+                "endpointPattern": "/loki/api/v1/query",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/loki/api/v1/query_range",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/loki/api/v1/labels",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/loki/api/v1/label/([a-zA-Z0-9_-]+)/values",
+                "method": "GET"
+              },
+              {
+                "endpointPattern": "/loki/api/v1/series",
+                "method": "GET"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "traffic",
+    "project": "inventory"
+  },
+  "spec": {
+    "display": {
+      "name": "Traffic"
+    },
+    "duration": "1h",
+    "panels": {
+      "rate": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Requests per second"
+          },
+          "plugin": {
+            "kind": "TimeSeriesChart",
+            "spec": {
+              "legend": {
+                "position": "bottom"
+              }
+            }
+          },
+          "queries": [
+            {
+              "kind": "TimeSeriesQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "PrometheusTimeSeriesQuery",
+                  "spec": {
+                    "query": "sum by (service_name) (rate(app_requests_total[5m]))",
+                    "seriesNameFormat": "{{service_name}}"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/rate"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,245 @@
+# Knowledge check for module 040-02. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats107-040-02
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: module-040-02
+  title: "Filter Logs And Traces With Several Selections"
+placement:
+  position: after
+  reading: sections/section-040/module-02/course-05-summary.md
+questions:
+  - id: ats107-040-02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match several values"
+    source_readings:
+      - sections/section-040/module-02/course-01-cascades-with-many-values.md
+    prompt: "A variable `env` allows several values and the log query must keep lines from all selected environments. Which matcher fits?"
+    options:
+      - id: a
+        text: "`deployment_environment=\"$env\"`"
+        explanation: "Not correct. The `=` operator compares to one exact text, so two values match nothing."
+      - id: b
+        text: "`deployment_environment=~\"$env\"`"
+        explanation: "Correct. `=~` reads the value as a regular expression, and the default format writes several values as `(a|b)`."
+      - id: c
+        text: "`deployment_environment!=\"$env\"`"
+        explanation: "Not correct. That excludes the selected environments."
+      - id: d
+        text: "`deployment_environment~\"$env\"`"
+        explanation: "Not correct. That is not a LogQL operator."
+    correct_option: b
+    explanation: "Correct. `=~` reads the value as a regular expression, and the default format writes several values as `(a|b)`."
+
+  - id: ats107-040-02-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Cascade with several values"
+    source_readings:
+      - sections/section-040/module-02/course-01-cascades-with-many-values.md
+    prompt: "The matcher of the `service` variable must follow an `env` variable that allows several values. Which matcher text is right?"
+    options:
+      - id: a
+        text: "`app_requests_total{deployment_environment=\"$env\"}`"
+        explanation: "Not correct. With two environments selected the text becomes `(a|b)` and `=` matches nothing."
+      - id: b
+        text: "`app_requests_total{deployment_environment=~\"$env\"}`"
+        explanation: "Correct. The regular expression operator accepts one or many values."
+      - id: c
+        text: "`app_requests_total{$env}`"
+        explanation: "Not correct. A matcher needs a label name and an operator."
+      - id: d
+        text: "`app_requests_total`"
+        explanation: "Not correct. Without the matcher the list no longer follows `env`."
+    correct_option: b
+    explanation: "Correct. The regular expression operator accepts one or many values."
+
+  - id: ats107-040-02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Write All as a pattern"
+    source_readings:
+      - sections/section-040/module-02/course-01-cascades-with-many-values.md
+    prompt: "What does `customAllValue: \".*\"` change?"
+    options:
+      - id: a
+        text: "`All` writes `.*` into the query instead of every loaded value"
+        explanation: "Correct. `.*` matches any value, including one that appeared after the list loaded."
+      - id: b
+        text: "It hides the `All` entry"
+        explanation: "Not correct. `allowAllValue` controls the entry."
+      - id: c
+        text: "It selects only the first value"
+        explanation: "Not correct. Selection is not changed."
+      - id: d
+        text: "It makes the variable global"
+        explanation: "Not correct. The scope is set by where the variable is defined."
+    correct_option: a
+    explanation: "Correct. `.*` matches any value, including one that appeared after the list loaded."
+
+  - id: ats107-040-02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order of variables"
+    source_readings:
+      - sections/section-040/module-02/course-01-cascades-with-many-values.md
+    prompt: "A dashboard lists `service` before `env`, and the matcher of `service` uses `$env`. What is the likely result?"
+    options:
+      - id: a
+        text: "The service list does not follow `env`, because `env` is not loaded yet when the list is built"
+        explanation: "Correct. A variable can depend only on variables listed before it."
+      - id: b
+        text: "Perses sorts the list by dependency and fixes it"
+        explanation: "Not correct. The order in the list is the order of evaluation."
+      - id: c
+        text: "The dashboard fails to save"
+        explanation: "Not correct. It saves; the cascade just behaves wrongly."
+      - id: d
+        text: "`env` becomes read-only"
+        explanation: "Not correct. Nothing like that happens."
+    correct_option: a
+    explanation: "Correct. A variable can depend only on variables listed before it."
+
+  - id: ats107-040-02-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Search a log line"
+    source_readings:
+      - sections/section-040/module-02/course-02-search-text-in-logs.md
+    prompt: "Which LogQL filter keeps only lines that contain the text `order`?"
+    options:
+      - id: a
+        text: "`|= \"order\"`"
+        explanation: "Correct. `|=` keeps lines that contain the text."
+      - id: b
+        text: "`!= \"order\"`"
+        explanation: "Not correct. That drops lines that contain the text."
+      - id: c
+        text: "`=~ \"order\"`"
+        explanation: "Not correct. That is a label matcher, not a line filter."
+      - id: d
+        text: "`| order`"
+        explanation: "Not correct. That is not a line filter."
+    correct_option: a
+    explanation: "Correct. `|=` keeps lines that contain the text."
+
+  - id: ats107-040-02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose a text variable"
+    source_readings:
+      - sections/section-040/module-02/course-02-search-text-in-logs.md
+    prompt: "Readers want to type any word and see log lines that contain it. Which variable fits?"
+    options:
+      - id: a
+        text: "`TextVariable`"
+        explanation: "Correct. It holds one text the reader can edit, and a query uses it as `$search`."
+      - id: b
+        text: "`StaticListVariable`"
+        explanation: "Not correct. That offers a fixed list, not free text."
+      - id: c
+        text: "`PrometheusLabelValuesVariable`"
+        explanation: "Not correct. That fills a list from metric labels."
+      - id: d
+        text: "`DatasourceVariable`"
+        explanation: "Not correct. That lists datasources."
+    correct_option: a
+    explanation: "Correct. It holds one text the reader can edit, and a query uses it as `$search`."
+
+  - id: ats107-040-02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Treat text as a pattern"
+    source_readings:
+      - sections/section-040/module-02/course-02-search-text-in-logs.md
+    prompt: "A reader types `order.*payments` into a text variable used as `|~ \"$search\"`. What happens?"
+    options:
+      - id: a
+        text: "The text is read as a regular expression and matches lines with `order` followed by `payments`"
+        explanation: "Correct. `|~` reads its text as a pattern, so special characters keep their meaning."
+      - id: b
+        text: "The text is searched literally"
+        explanation: "Not correct. That is true for `|=`, not for `|~`."
+      - id: c
+        text: "Loki rejects the query"
+        explanation: "Not correct. The pattern is valid."
+      - id: d
+        text: "All lines are dropped"
+        explanation: "Not correct. Matching lines are kept."
+    correct_option: a
+    explanation: "Correct. `|~` reads its text as a pattern, so special characters keep their meaning."
+
+  - id: ats107-040-02-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Filter by duration"
+    source_readings:
+      - sections/section-040/module-02/course-03-filtering-traces-by-duration.md
+    prompt: "Which TraceQL condition keeps traces with a span longer than 100 milliseconds?"
+    options:
+      - id: a
+        text: "`{duration > 100ms}`"
+        explanation: "Correct. TraceQL accepts a number with a unit."
+      - id: b
+        text: "`{duration > 100}`"
+        explanation: "Not correct. A number without a unit is not a valid duration."
+      - id: c
+        text: "`{span.duration > \"100ms\"}`"
+        explanation: "Not correct. `duration` is an intrinsic, not a span attribute, and it is not quoted."
+      - id: d
+        text: "`{latency > 100ms}`"
+        explanation: "Not correct. There is no field named `latency`."
+    correct_option: a
+    explanation: "Correct. TraceQL accepts a number with a unit."
+
+  - id: ats107-040-02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Combine two conditions"
+    source_readings:
+      - sections/section-040/module-02/course-03-filtering-traces-by-duration.md
+    prompt: "A TraceQL query must match a service and a duration on the same span. Where does `&&` go?"
+    options:
+      - id: a
+        text: "Inside one pair of braces: `{resource.service.name =~ \"$service\" && duration > $slower}`"
+        explanation: "Correct. Conditions inside one pair of braces apply to the same span."
+      - id: b
+        text: "Between two pairs of braces only"
+        explanation: "Not correct. That combines spans that may be different."
+      - id: c
+        text: "Outside the query, in the datasource"
+        explanation: "Not correct. The query carries the condition."
+      - id: d
+        text: "It is not allowed in TraceQL"
+        explanation: "Not correct. `&&` is allowed."
+    correct_option: a
+    explanation: "Correct. Conditions inside one pair of braces apply to the same span."
+
+  - id: ats107-040-02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find a failing case"
+    source_readings:
+      - sections/section-040/module-02/course-04-debugging-a-variable-cascade.md
+    prompt: "The panels work with `All` selected and with one value, but are empty with two environments selected. Which check comes first?"
+    options:
+      - id: a
+        text: "Look for `=` where `=~` is needed in a matcher"
+        explanation: "Correct. `=` accepts only one exact value."
+      - id: b
+        text: "Check `customAllValue`"
+        explanation: "Not correct. `All` works, so that value is fine."
+      - id: c
+        text: "Check the datasource scrape interval"
+        explanation: "Not correct. That affects rate windows, not matchers."
+      - id: d
+        text: "Check the dashboard duration"
+        explanation: "Not correct. The time range does not depend on how many values are selected."
+    correct_option: a
+    explanation: "Correct. `=` accepts only one exact value."

@@ -1,0 +1,63 @@
+# Build A Numbers Dashboard
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-107-lab-020-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, percli, the observability stack and Perses v0.54.0"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-107-lab-020-02-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The observability stack"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses answers and telemetry has arrived"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-panel-kinds"
+      description: "Confirms the dashboard numbers has a stat chart, a gauge and a bar chart with the right units and sort order"
+      type: "file"
+      source: "validation/validate-panel-kinds.sh"
+    - name: "validate-thresholds"
+      description: "Confirms the gauge has a default colour and ascending threshold steps"
+      type: "file"
+      source: "validation/validate-thresholds.sh"
+    - name: "validate-layout-and-data"
+      description: "Confirms every panel is placed and every query returns data"
+      type: "file"
+      source: "validation/validate-layout-and-data.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - docker.io/persesdev/perses:v0.54.0
+      - ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+      - grafana/loki:3.7.9
+      - grafana/pyroscope:2.4.1
+      - grafana/tempo:2.10.10
+      - nginx:1.27-alpine
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1

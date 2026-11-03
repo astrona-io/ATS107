@@ -25,10 +25,10 @@ contains:
 
 | Section | Title | Modules | Labs | Topic |
 | --- | --- | --- | --- | --- |
-| [010](sections/section-010) | Datasources And Their Scopes | 1 | 1 + capstone | Datasources, the proxy, Secrets |
-| [020](sections/section-020) | Metrics, Logs, Traces And Profiles | 1 | 1 + capstone | Panels per signal |
-| [030](sections/section-030) | Dashboard Variables | 1 | 1 + capstone | Variables and scopes |
-| [040](sections/section-040) | Cascading Variables Across Signals | 1 | 1 + capstone | Unified incident dashboard |
+| [010](sections/section-010) | Datasources And Their Scopes | 2 | 2 + capstone | Datasources, the proxy, Secrets |
+| [020](sections/section-020) | Metrics, Logs, Traces And Profiles | 3 | 3 + capstone | Panels per signal |
+| [030](sections/section-030) | Dashboard Variables | 2 | 2 + capstone | Variables and scopes |
+| [040](sections/section-040) | Cascading Variables Across Signals | 2 | 2 + capstone | Unified incident dashboard |
 
 The order follows the path of one query. Section 010 is where the query goes:
 a datasource and the Perses proxy. Section 020 is what draws its answer: one
@@ -42,9 +42,14 @@ and section 040 makes one selection drive metrics, logs and traces at once.
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
 | 010-01 | [Connect Perses To Your Data Backends](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
+| 010-02 | [Tune And Scope Datasources](sections/section-010/module-02/course.md) | 4 | [lab-01](sections/section-010/module-02/labs/lab-01) |
 | 020-01 | [Show Metrics, Logs, Traces And Profiles](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
+| 020-02 | [Show Single Numbers, Gauges And Bars](sections/section-020/module-02/course.md) | 4 | [lab-01](sections/section-020/module-02/labs/lab-01) |
+| 020-03 | [Tune Time Series, Layouts And Dashboard Files](sections/section-020/module-03/course.md) | 4 | [lab-01](sections/section-020/module-03/labs/lab-01) |
 | 030-01 | [Make Dashboards Interactive With Variables](sections/section-030/module-01/course.md) | 3 | [lab-01](sections/section-030/module-01/labs/lab-01) |
+| 030-02 | [Use Built-In Variables And Choose Groupings](sections/section-030/module-02/course.md) | 4 | [lab-01](sections/section-030/module-02/labs/lab-01) |
 | 040-01 | [Build A Unified Incident Dashboard](sections/section-040/module-01/course.md) | 2 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 040-02 | [Filter Logs And Traces With Several Selections](sections/section-040/module-02/course.md) | 4 | [lab-01](sections/section-040/module-02/labs/lab-01) |
 
 ---
 

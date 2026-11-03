@@ -107,6 +107,49 @@ modules:
         path: sections/section-010/module-01/course-04-summary.md
 
       - type: reading
+        title: "Tune And Scope Datasources"
+        path: sections/section-010/module-02/course.md
+      - type: reading
+        title: "Settings Of A Prometheus Datasource"
+        path: sections/section-010/module-02/course-01-prometheus-datasource-settings.md
+      - type: reading
+        title: "Loki, Tempo And Pyroscope Datasources"
+        path: sections/section-010/module-02/course-02-loki-tempo-pyroscope-datasources.md
+      - type: reading
+        title: "Datasources Inside A Dashboard"
+        path: sections/section-010/module-02/course-03-datasources-inside-a-dashboard.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Give A Dashboard Its Own Datasource Lab"
+        path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: datasources
+        task_kind: build
+        tags: [global-datasource, datasource-override, default-datasource, project-datasource, prometheus]
+        learning_goals:
+          - Create a datasource that belongs to one dashboard
+          - Make a panel use it by name
+          - Prove the panel returns data and no other dashboard can use the datasource
+        resources:
+          - name: "Datasource"
+            url: https://perses.dev/perses/docs/concepts/datasource/
+          - name: "Datasource and variable scopes"
+            url: https://perses.dev/perses/docs/concepts/datasource-and-variable-scopes/
+      - type: reading
+        title: "Find Out Why A Datasource Fails"
+        path: sections/section-010/module-02/course-04-find-out-why-a-datasource-fails.md
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Tune And Scope Datasources"
+        path: sections/section-010/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
         title: Question
         path: sections/section-010/capstone/labs/lab-01/question.md
       - type: lab
@@ -184,6 +227,92 @@ modules:
         path: sections/section-020/module-01/course-04-summary.md
 
       - type: reading
+        title: "Show Single Numbers, Gauges And Bars"
+        path: sections/section-020/module-02/course.md
+      - type: reading
+        title: "Stat Charts, Calculations And Units"
+        path: sections/section-020/module-02/course-01-stat-charts-calculations-units.md
+      - type: reading
+        title: "Gauges And Thresholds"
+        path: sections/section-020/module-02/course-02-gauges-and-thresholds.md
+      - type: reading
+        title: "Bar Charts, Pie Charts And Tables"
+        path: sections/section-020/module-02/course-03-bar-pie-and-comparisons.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Build A Numbers Dashboard Lab"
+        path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: panels
+        task_kind: build
+        tags: [promql, prometheus, layout, percli-apply]
+        learning_goals:
+          - Write stat, gauge and bar panels with the right calculation, unit and thresholds
+          - Place every panel in the grid layout
+          - Prove every panel returns data
+        resources:
+          - name: "Dashboard"
+            url: https://perses.dev/perses/docs/concepts/dashboard/
+          - name: "Perses plugins"
+            url: https://perses.dev/plugins/docs/
+      - type: reading
+        title: "Markdown Panels And Instant Queries"
+        path: sections/section-020/module-02/course-04-markdown-and-instant-queries.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Show Single Numbers, Gauges And Bars"
+        path: sections/section-020/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "Tune Time Series, Layouts And Dashboard Files"
+        path: sections/section-020/module-03/course.md
+      - type: reading
+        title: "Time Series Chart Options"
+        path: sections/section-020/module-03/course-01-time-series-chart-options.md
+      - type: reading
+        title: "Grid Layouts And Panel Groups"
+        path: sections/section-020/module-03/course-02-grid-layouts-and-panel-groups.md
+      - type: reading
+        title: "Time Range And Refresh"
+        path: sections/section-020/module-03/course-03-time-range-and-refresh.md
+      - type: reading
+        title: "Dashboards As Files"
+        path: sections/section-020/module-03/course-04-dashboards-as-files.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Tune A Traffic Dashboard Lab"
+        path: sections/section-020/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: panels
+        task_kind: build
+        tags: [time-series-chart, layout, promql, prometheus, percli-apply]
+        learning_goals:
+          - Set legend, axis, line and threshold options on a time series chart
+          - Group panels in a collapsible layout and set the time range and refresh
+          - Export, edit and apply the dashboard as a file without losing panels
+        resources:
+          - name: "Dashboard"
+            url: https://perses.dev/perses/docs/concepts/dashboard/
+          - name: "Perses plugins"
+            url: https://perses.dev/plugins/docs/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-03/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Tune Time Series, Layouts And Dashboard Files"
+        path: sections/section-020/module-03/quiz.yaml
+        pass_score: 70
+
+      - type: reading
         title: Question
         path: sections/section-020/capstone/labs/lab-01/question.md
       - type: lab
@@ -257,6 +386,47 @@ modules:
         path: sections/section-030/module-01/course-04-summary.md
 
       - type: reading
+        title: "Use Built-In Variables And Choose Groupings"
+        path: sections/section-030/module-02/course.md
+      - type: reading
+        title: "Built-In Variables"
+        path: sections/section-030/module-02/course-01-built-in-variables.md
+      - type: reading
+        title: "The Rate Interval"
+        path: sections/section-030/module-02/course-02-the-rate-interval.md
+      - type: reading
+        title: "Variables That Choose A Grouping"
+        path: sections/section-030/module-02/course-03-variables-that-choose-a-grouping.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Make A Rate Dashboard Adapt To Its Window Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: variables
+        task_kind: build
+        tags: [list-variable, static-list, interpolation-format, promql, prometheus]
+        learning_goals:
+          - Use $__rate_interval so a rate query works on any window
+          - Build a group-by variable and write its values into a query with the csv format
+          - Prove the panel returns data for each grouping
+        resources:
+          - name: "Variable"
+            url: https://perses.dev/perses/docs/concepts/variable/
+      - type: reading
+        title: "Query Results As Variable Values"
+        path: sections/section-030/module-02/course-04-query-results-as-variable-values.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Use Built-In Variables And Choose Groupings"
+        path: sections/section-030/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
         title: Question
         path: sections/section-030/capstone/labs/lab-01/question.md
       - type: lab
@@ -327,6 +497,51 @@ modules:
       - type: reading
         title: Summary
         path: sections/section-040/module-01/course-03-summary.md
+
+      - type: reading
+        title: "Filter Logs And Traces With Several Selections"
+        path: sections/section-040/module-02/course.md
+      - type: reading
+        title: "Cascades With Many Values"
+        path: sections/section-040/module-02/course-01-cascades-with-many-values.md
+      - type: reading
+        title: "Search Text In Logs"
+        path: sections/section-040/module-02/course-02-search-text-in-logs.md
+      - type: reading
+        title: "Filtering Traces By Duration"
+        path: sections/section-040/module-02/course-03-filtering-traces-by-duration.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Filter Logs And Traces By Several Selections Lab"
+        path: sections/section-040/module-02/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: cascading
+        task_kind: build
+        tags: [cascading-variables, label-values, logql, traceql, logs-table, trace-table]
+        learning_goals:
+          - Cascade a service variable from an environment variable that allows several values
+          - Filter log lines with a text variable and traces with a duration variable
+          - Prove every panel returns data for All, for several values and for one value
+        resources:
+          - name: "Variable"
+            url: https://perses.dev/perses/docs/concepts/variable/
+          - name: "LogQL"
+            url: https://grafana.com/docs/loki/latest/query/
+          - name: "TraceQL"
+            url: https://grafana.com/docs/tempo/latest/traceql/
+      - type: reading
+        title: "Debugging A Variable Cascade"
+        path: sections/section-040/module-02/course-04-debugging-a-variable-cascade.md
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Filter Logs And Traces With Several Selections"
+        path: sections/section-040/module-02/quiz.yaml
+        pass_score: 70
 
       - type: reading
         title: Question

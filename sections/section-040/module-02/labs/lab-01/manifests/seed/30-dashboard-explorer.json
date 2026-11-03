@@ -1,0 +1,96 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "explorer",
+    "project": "inventory"
+  },
+  "spec": {
+    "display": {
+      "name": "Explorer"
+    },
+    "duration": "1h",
+    "variables": [],
+    "panels": {
+      "logs": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Logs"
+          },
+          "plugin": {
+            "kind": "LogsTable",
+            "spec": {
+              "showTime": true
+            }
+          },
+          "queries": [
+            {
+              "kind": "LogQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "LokiLogQuery",
+                  "spec": {
+                    "query": "{service_name=\"checkout\"}"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "traces": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Traces"
+          },
+          "plugin": {
+            "kind": "TraceTable",
+            "spec": {}
+          },
+          "queries": [
+            {
+              "kind": "TraceQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "TempoTraceQuery",
+                  "spec": {
+                    "query": "{resource.service.name=\"checkout\"}",
+                    "limit": 20
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 10,
+              "content": {
+                "$ref": "#/spec/panels/logs"
+              }
+            },
+            {
+              "x": 0,
+              "y": 10,
+              "width": 24,
+              "height": 10,
+              "content": {
+                "$ref": "#/spec/panels/traces"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

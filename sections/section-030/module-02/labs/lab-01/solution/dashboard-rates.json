@@ -1,0 +1,92 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "rates",
+    "project": "inventory"
+  },
+  "spec": {
+    "display": {
+      "name": "Rates"
+    },
+    "duration": "1h",
+    "variables": [
+      {
+        "kind": "ListVariable",
+        "spec": {
+          "name": "groupby",
+          "display": {
+            "name": "Group by",
+            "hidden": false
+          },
+          "allowAllValue": false,
+          "allowMultiple": false,
+          "defaultValue": "service_name",
+          "plugin": {
+            "kind": "StaticListVariable",
+            "spec": {
+              "values": [
+                {
+                  "value": "service_name",
+                  "label": "Service"
+                },
+                {
+                  "value": "deployment_environment",
+                  "label": "Environment"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "panels": {
+      "requests": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Request rate"
+          },
+          "plugin": {
+            "kind": "TimeSeriesChart",
+            "spec": {
+              "legend": {
+                "position": "bottom"
+              }
+            }
+          },
+          "queries": [
+            {
+              "kind": "TimeSeriesQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "PrometheusTimeSeriesQuery",
+                  "spec": {
+                    "query": "sum by ($groupby) (rate(app_requests_total[$__rate_interval]))"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 8,
+              "content": {
+                "$ref": "#/spec/panels/requests"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

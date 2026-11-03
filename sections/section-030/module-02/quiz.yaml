@@ -1,0 +1,245 @@
+# Knowledge check for module 030-02. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats107-030-02
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: module-030-02
+  title: "Use Built-In Variables And Choose Groupings"
+placement:
+  position: after
+  reading: sections/section-030/module-02/course-05-summary.md
+questions:
+  - id: ats107-030-02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the range variable"
+    source_readings:
+      - sections/section-030/module-02/course-01-built-in-variables.md
+    prompt: "Which built-in variable holds the length of the dashboard time range as a duration such as `6h`?"
+    options:
+      - id: a
+        text: "`$__interval`"
+        explanation: "Not correct. `$__interval` is the step of the chart."
+      - id: b
+        text: "`$__range`"
+        explanation: "Correct. `$__range` is the length of the time range; `$__range_s` and `$__range_ms` give seconds and milliseconds."
+      - id: c
+        text: "`$__dashboard`"
+        explanation: "Not correct. `$__dashboard` is the name of the open dashboard."
+      - id: d
+        text: "`$__project`"
+        explanation: "Not correct. `$__project` is the name of the project."
+    correct_option: b
+    explanation: "Correct. `$__range` is the length of the time range; `$__range_s` and `$__range_ms` give seconds and milliseconds."
+
+  - id: ats107-030-02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Count requests in a window"
+    source_readings:
+      - sections/section-030/module-02/course-01-built-in-variables.md
+    prompt: "Which query shows how many requests arrived in whatever window the reader picked?"
+    options:
+      - id: a
+        text: "`sum(increase(app_requests_total[$__range]))`"
+        explanation: "Correct. `increase` returns the growth of the counter over `$__range`."
+      - id: b
+        text: "`sum(rate(app_requests_total[5m]))`"
+        explanation: "Not correct. That is a rate over a fixed window."
+      - id: c
+        text: "`sum(app_requests_total)`"
+        explanation: "Not correct. That is the counter value since start, not the growth in the window."
+      - id: d
+        text: "`count(app_requests_total)`"
+        explanation: "Not correct. That counts series, not requests."
+    correct_option: a
+    explanation: "Correct. `increase` returns the growth of the counter over `$__range`."
+
+  - id: ats107-030-02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Test a query by hand"
+    source_readings:
+      - sections/section-030/module-02/course-01-built-in-variables.md
+    prompt: "A panel query contains `$__range`. Why does it fail when you send it with `curl` through the proxy?"
+    options:
+      - id: a
+        text: "Built-in variables are filled in by the dashboard, so the backend receives the plain text"
+        explanation: "Correct. Replace the variable with a real duration when you test by hand."
+      - id: b
+        text: "The proxy blocks the character `$`"
+        explanation: "Not correct. The proxy passes the text on."
+      - id: c
+        text: "`$__range` only works in Loki"
+        explanation: "Not correct. It works in any query of a dashboard."
+      - id: d
+        text: "`curl` cannot send queries"
+        explanation: "Not correct. `curl` works; the backend does not know the name."
+    correct_option: a
+    explanation: "Correct. Replace the variable with a real duration when you test by hand."
+
+  - id: ats107-030-02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Why a fixed window breaks"
+    source_readings:
+      - sections/section-030/module-02/course-02-the-rate-interval.md
+    prompt: "Data is scraped every minute and a query uses `rate(...[30s])`. What is the most likely result?"
+    options:
+      - id: a
+        text: "Many points are missing because a window holds fewer than two samples"
+        explanation: "Correct. Prometheus needs at least two samples inside the window."
+      - id: b
+        text: "A very smooth line"
+        explanation: "Not correct. A short window follows every change."
+      - id: c
+        text: "An error from Perses"
+        explanation: "Not correct. The query is valid; it returns few or no points."
+      - id: d
+        text: "The same result as `$__rate_interval`"
+        explanation: "Not correct. The rate interval is never shorter than four scrape intervals."
+    correct_option: a
+    explanation: "Correct. Prometheus needs at least two samples inside the window."
+
+  - id: ats107-030-02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the rate window"
+    source_readings:
+      - sections/section-030/module-02/course-02-the-rate-interval.md
+    prompt: "A rate chart should keep working on a window of 15 minutes and on a window of 7 days. Which range selector fits?"
+    options:
+      - id: a
+        text: "`[5m]`"
+        explanation: "Not correct. A fixed window suits only some windows."
+      - id: b
+        text: "`[$__rate_interval]`"
+        explanation: "Correct. It grows with the step and stays above four scrape intervals."
+      - id: c
+        text: "`[$__range]`"
+        explanation: "Not correct. That is the whole window, so each point averages everything."
+      - id: d
+        text: "`[1s]`"
+        explanation: "Not correct. A window of one second holds no samples."
+    correct_option: b
+    explanation: "Correct. It grows with the step and stays above four scrape intervals."
+
+  - id: ats107-030-02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the scrape source"
+    source_readings:
+      - sections/section-030/module-02/course-02-the-rate-interval.md
+    prompt: "Where does Perses read the scrape interval it uses to compute `$__rate_interval`?"
+    options:
+      - id: a
+        text: "From `scrapeInterval` on the Prometheus datasource"
+        explanation: "Correct. A wrong value there makes the rate interval wrong."
+      - id: b
+        text: "From the dashboard `refreshInterval`"
+        explanation: "Not correct. The refresh interval is how often the panels run."
+      - id: c
+        text: "From the panel width"
+        explanation: "Not correct. The width changes the step, not the scrape interval."
+      - id: d
+        text: "From the project name"
+        explanation: "Not correct. The project has no such setting."
+    correct_option: a
+    explanation: "Correct. A wrong value there makes the rate interval wrong."
+
+  - id: ats107-030-02-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Show a readable name"
+    source_readings:
+      - sections/section-030/module-02/course-03-variables-that-choose-a-grouping.md
+    prompt: "A group-by dropdown should show `Service` while the query receives `service_name`. How do you write the entry?"
+    options:
+      - id: a
+        text: "`{value: service_name, label: Service}`"
+        explanation: "Correct. The label is shown and the value is sent to the query."
+      - id: b
+        text: "`{value: Service, label: service_name}`"
+        explanation: "Not correct. That sends `Service` to the query."
+      - id: c
+        text: "`Service: service_name`"
+        explanation: "Not correct. That is not the form a static list takes."
+      - id: d
+        text: "`display: Service`"
+        explanation: "Not correct. There is no such field on an entry."
+    correct_option: a
+    explanation: "Correct. The label is shown and the value is sent to the query."
+
+  - id: ats107-030-02-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Group by several labels"
+    source_readings:
+      - sections/section-030/module-02/course-03-variables-that-choose-a-grouping.md
+    prompt: "A variable allows several values, and the query must read `by (service_name,deployment_environment)`. Which text in the query does that?"
+    options:
+      - id: a
+        text: "`by ($groupby)`"
+        explanation: "Not correct. With several values the default format writes `(a|b)`, which `by` rejects."
+      - id: b
+        text: "`by (${groupby:csv})`"
+        explanation: "Correct. The `csv` format joins the values with commas."
+      - id: c
+        text: "`by (${groupby:regex})`"
+        explanation: "Not correct. The regex format writes `(a|b)`."
+      - id: d
+        text: "`by ($groupby[0])`"
+        explanation: "Not correct. No such syntax exists."
+    correct_option: b
+    explanation: "Correct. The `csv` format joins the values with commas."
+
+  - id: ats107-030-02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick a variable source"
+    source_readings:
+      - sections/section-030/module-02/course-04-query-results-as-variable-values.md
+    prompt: "A list must hold only the services that have traffic right now. Which variable plugin fits?"
+    options:
+      - id: a
+        text: "`StaticListVariable`"
+        explanation: "Not correct. A static list does not change with data."
+      - id: b
+        text: "`PrometheusPromQLVariable`"
+        explanation: "Correct. It fills the list from the labels of an expression."
+      - id: c
+        text: "`DatasourceVariable`"
+        explanation: "Not correct. That lists datasources, not services."
+      - id: d
+        text: "`TextVariable`"
+        explanation: "Not correct. That is a single text field."
+    correct_option: b
+    explanation: "Correct. It fills the list from the labels of an expression."
+
+  - id: ats107-030-02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find an empty list"
+    source_readings:
+      - sections/section-030/module-02/course-04-query-results-as-variable-values.md
+    prompt: "A `PrometheusPromQLVariable` uses `sum(rate(app_requests_total[5m]))` and `labelName: service_name`. Why is the list empty?"
+    options:
+      - id: a
+        text: "`sum` without `by` drops every label, so there is no `service_name` in the result"
+        explanation: "Correct. Keep the label with `sum by (service_name)`."
+      - id: b
+        text: "`labelName` must be `__name__`"
+        explanation: "Not correct. `labelName` is the label whose values fill the list."
+      - id: c
+        text: "Variables cannot use `rate`"
+        explanation: "Not correct. They can use any valid PromQL."
+      - id: d
+        text: "The window `5m` is too long"
+        explanation: "Not correct. The window does not remove labels."
+    correct_option: a
+    explanation: "Correct. Keep the label with `sum by (service_name)`."

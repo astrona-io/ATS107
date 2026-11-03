@@ -27,9 +27,19 @@ The playground holds Perses, the project `inventory` and a global datasource for
 3. Secrets For Datasource Credentials, followed by the lab **Give A Project Its Own Loki Datasource**
 4. Summary
 
+### 2. Tune And Scope Datasources
+
+The playground holds Perses, the project `inventory`, a dashboard `reports` and a global datasource for each backend.
+
+1. Settings Of A Prometheus Datasource
+2. Loki, Tempo And Pyroscope Datasources
+3. Datasources Inside A Dashboard, followed by the lab **Give A Dashboard Its Own Datasource**
+4. Find Out Why A Datasource Fails
+5. Summary
+
 ## Section capstone: Repair The Datasources Of A Project
 
-The capstone is one graded scenario that combines everything in the section. Three datasources the project `inventory` relies on are broken in three different ways, and every dashboard of the project shows empty panels. Work it after the module lab.
+The capstone is one graded scenario that combines everything in the section. Three datasources the project `inventory` relies on are broken in three different ways, and every dashboard of the project shows empty panels. Work it after the module labs.
 
 Start the capstone:
 

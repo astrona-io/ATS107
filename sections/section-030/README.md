@@ -14,7 +14,7 @@ A dashboard with `service_name="checkout"` written into every query only works f
 
 ## The learning path
 
-The section has one module with a landing page, three parts, a graded lab right after the second part, and a summary. The landing page starts the module's playground.
+The section has two modules. Each has a landing page, several short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
 
 ### 1. Make Dashboards Interactive With Variables
 
@@ -25,9 +25,19 @@ The playground holds Perses with a default global datasource for each backend an
 3. Interpolation Formats And Variable Scopes
 4. Summary
 
+### 2. Use Built-In Variables And Choose Groupings
+
+The playground holds Perses with a default global datasource for each backend, a second Prometheus datasource, `prometheus-replica`, and telemetry for `checkout` and `payments` in `production` and `staging`.
+
+1. Built-In Variables
+2. The Rate Interval
+3. Variables That Choose A Grouping, followed by the lab **Make A Rate Dashboard Adapt To Its Window**
+4. Query Results As Variable Values
+5. Summary
+
 ## Section capstone: Fix Variables That Show The Wrong Values
 
-The capstone is one graded scenario that combines the module. The dashboard `overview` of the project `inventory` offers environments that do not exist, an empty service list, and a panel that breaks as soon as the reader picks two services. Work it after the module lab.
+The capstone is one graded scenario that combines the modules. The dashboard `overview` of the project `inventory` offers environments that do not exist, an empty service list, and a panel that breaks as soon as the reader picks two services. Work it after the module labs.
 
 Start the capstone:
 

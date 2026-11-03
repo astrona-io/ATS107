@@ -1,0 +1,63 @@
+# Give A Dashboard Its Own Datasource
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-107-lab-010-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-perses"
+      description: "Installs Helm, percli, the observability stack and Perses v0.54.0"
+      type: "file"
+      source: "bootstrap/01-install-perses.sh"
+    - name: "ats-107-lab-010-02-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The observability stack"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until Perses answers and telemetry has arrived"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-dashboard-datasource"
+      description: "Confirms the dashboard defines reports-prometheus as a non-default PrometheusDatasource with the right url and scrapeInterval"
+      type: "file"
+      source: "validation/validate-dashboard-datasource.sh"
+    - name: "validate-no-other-scope"
+      description: "Confirms the panel still uses reports-prometheus and no project or global datasource has that name"
+      type: "file"
+      source: "validation/validate-no-other-scope.sh"
+    - name: "validate-dashboard-proxy"
+      description: "Confirms a query through the dashboard proxy path returns data"
+      type: "file"
+      source: "validation/validate-dashboard-proxy.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - docker.io/persesdev/perses:v0.54.0
+      - ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.163.0
+      - grafana/loki:3.7.9
+      - grafana/pyroscope:2.4.1
+      - grafana/tempo:2.10.10
+      - nginx:1.27-alpine
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1

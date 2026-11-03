@@ -16,7 +16,7 @@ This section builds that dashboard.
 
 ## The learning path
 
-The section has one module with a landing page, two parts, a graded lab right after the second part, and a summary. The landing page starts the module's playground.
+The section has two modules. Each has a landing page, several short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
 
 ### 1. Build A Unified Incident Dashboard
 
@@ -26,9 +26,19 @@ The playground holds Perses with a default global datasource for each backend, a
 2. One Value In PromQL, LogQL And TraceQL, followed by the lab **Build A Unified Incident Dashboard**
 3. Summary
 
+### 2. Filter Logs And Traces With Several Selections
+
+The playground holds Perses with a default global datasource for each backend, and telemetry for `checkout` in `production` and `staging` and for `payments` in `production` only.
+
+1. Cascades With Many Values
+2. Search Text In Logs
+3. Filtering Traces By Duration, followed by the lab **Filter Logs And Traces By Several Selections**
+4. Debugging A Variable Cascade
+5. Summary
+
 ## Section capstone: Repair An Incident Dashboard That Hides Data
 
-The capstone is one graded scenario that combines the module. The incident dashboard of the project `inventory` lists every service for every environment, and two of its three panels stay empty whatever the reader selects. Work it after the module lab.
+The capstone is one graded scenario that combines the modules. The incident dashboard of the project `inventory` lists every service for every environment, and two of its three panels stay empty whatever the reader selects. Work it after the module labs.
 
 Start the capstone:
 

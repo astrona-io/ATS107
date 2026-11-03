@@ -1,0 +1,245 @@
+# Knowledge check for module 020-02. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats107-020-02
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: module-020-02
+  title: "Show Single Numbers, Gauges And Bars"
+placement:
+  position: after
+  reading: sections/section-020/module-02/course-05-summary.md
+questions:
+  - id: ats107-020-02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose a calculation"
+    source_readings:
+      - sections/section-020/module-02/course-01-stat-charts-calculations-units.md
+    prompt: "A stat chart query returns a series over one hour. Which `calculation` shows the newest value of the series?"
+    options:
+      - id: a
+        text: "`first`"
+        explanation: "Not correct. `first` shows the oldest value in the range."
+      - id: b
+        text: "`last`"
+        explanation: "Correct. `last` reduces the series to its newest value."
+      - id: c
+        text: "`sum`"
+        explanation: "Not correct. `sum` adds all values of the series together."
+      - id: d
+        text: "`min`"
+        explanation: "Not correct. `min` shows the smallest value in the range."
+    correct_option: b
+    explanation: "Correct. `last` reduces the series to its newest value."
+
+  - id: ats107-020-02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the unit of a ratio"
+    source_readings:
+      - sections/section-020/module-02/course-01-stat-charts-calculations-units.md
+    prompt: "A query returns the share of errors as a value between 0 and 1. Which unit shows 0.25 as 25 percent?"
+    options:
+      - id: a
+        text: "`percent`"
+        explanation: "Not correct. `percent` expects values from 0 to 100, so 0.25 would show as 0.25 percent."
+      - id: b
+        text: "`percent-decimal`"
+        explanation: "Correct. `percent-decimal` multiplies a value from 0 to 1 by 100."
+      - id: c
+        text: "`decimal`"
+        explanation: "Not correct. `decimal` shows a plain number without a percent sign."
+      - id: d
+        text: "`bytes`"
+        explanation: "Not correct. `bytes` formats a size, not a share."
+    correct_option: b
+    explanation: "Correct. `percent-decimal` multiplies a value from 0 to 1 by 100."
+
+  - id: ats107-020-02-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Add a sparkline"
+    source_readings:
+      - sections/section-020/module-02/course-01-stat-charts-calculations-units.md
+    prompt: "Which field of a `StatChart` draws a small trend line behind the number?"
+    options:
+      - id: a
+        text: "`legend`"
+        explanation: "Not correct. A stat chart has no legend field for a trend."
+      - id: b
+        text: "`sparkline`"
+        explanation: "Correct. `sparkline` draws the trend behind the number."
+      - id: c
+        text: "`thresholds`"
+        explanation: "Not correct. `thresholds` change colours, not the shape of the chart."
+      - id: d
+        text: "`sort`"
+        explanation: "Not correct. `sort` orders bars and slices."
+    correct_option: b
+    explanation: "Correct. `sparkline` draws the trend behind the number."
+
+  - id: ats107-020-02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order threshold steps"
+    source_readings:
+      - sections/section-020/module-02/course-02-gauges-and-thresholds.md
+    prompt: "A gauge has `defaultColor: green` and two steps. What is the right order of the step values?"
+    options:
+      - id: a
+        text: "From the highest value to the lowest"
+        explanation: "Not correct. Steps are read as a ladder from the bottom, so they must start low."
+      - id: b
+        text: "From the lowest value to the highest"
+        explanation: "Correct. Each step applies from its value up to the next step."
+      - id: c
+        text: "Any order; Perses sorts them"
+        explanation: "Not correct. Perses does not reorder the steps you write."
+      - id: d
+        text: "Only one step is allowed"
+        explanation: "Not correct. A threshold list can have as many steps as you need."
+    correct_option: b
+    explanation: "Correct. Each step applies from its value up to the next step."
+
+  - id: ats107-020-02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain defaultColor"
+    source_readings:
+      - sections/section-020/module-02/course-02-gauges-and-thresholds.md
+    prompt: "What does `defaultColor` in `thresholds` set?"
+    options:
+      - id: a
+        text: "The colour of values above the last step"
+        explanation: "Not correct. Values above the last step use the colour of that step."
+      - id: b
+        text: "The colour of values below the first step"
+        explanation: "Correct. It is the colour used until the first step value is reached."
+      - id: c
+        text: "The colour of the panel border"
+        explanation: "Not correct. The border is not part of `thresholds`."
+      - id: d
+        text: "The colour of the legend text"
+        explanation: "Not correct. Thresholds do not change the legend."
+    correct_option: b
+    explanation: "Correct. It is the colour used until the first step value is reached."
+
+  - id: ats107-020-02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose a threshold mode"
+    source_readings:
+      - sections/section-020/module-02/course-02-gauges-and-thresholds.md
+    prompt: "Thresholds should follow the maximum of a gauge instead of fixed numbers. Which `mode` is used?"
+    options:
+      - id: a
+        text: "`absolute`"
+        explanation: "Not correct. `absolute` compares with the numbers you write."
+      - id: b
+        text: "`percent`"
+        explanation: "Correct. `percent` reads each step value as a share of the maximum."
+      - id: c
+        text: "`relative`"
+        explanation: "Not correct. No such mode exists."
+      - id: d
+        text: "`auto`"
+        explanation: "Not correct. No such mode exists."
+    correct_option: b
+    explanation: "Correct. `percent` reads each step value as a share of the maximum."
+
+  - id: ats107-020-02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Sort a bar chart"
+    source_readings:
+      - sections/section-020/module-02/course-03-bar-pie-and-comparisons.md
+    prompt: "Which setting orders the bars of a `BarChart` from the highest to the lowest?"
+    options:
+      - id: a
+        text: "`sort: asc`"
+        explanation: "Not correct. `asc` orders from the lowest to the highest."
+      - id: b
+        text: "`sort: desc`"
+        explanation: "Correct. `desc` puts the highest bar first."
+      - id: c
+        text: "`mode: value`"
+        explanation: "Not correct. `mode` chooses between the value and the percentage of the total."
+      - id: d
+        text: "`calculation: max`"
+        explanation: "Not correct. `calculation` reduces each series to one number; it does not order the bars."
+    correct_option: b
+    explanation: "Correct. `desc` puts the highest bar first."
+
+  - id: ats107-020-02-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Show a share on a pie chart"
+    source_readings:
+      - sections/section-020/module-02/course-03-bar-pie-and-comparisons.md
+    prompt: "A `PieChart` must label each slice with its percentage of the total. Which `mode` is set?"
+    options:
+      - id: a
+        text: "`value`"
+        explanation: "Not correct. `value` shows the number of each slice."
+      - id: b
+        text: "`percentage`"
+        explanation: "Correct. `percentage` shows each slice as a share of the total."
+      - id: c
+        text: "`share`"
+        explanation: "Not correct. No such mode exists."
+      - id: d
+        text: "`total`"
+        explanation: "Not correct. No such mode exists."
+    correct_option: b
+    explanation: "Correct. `percentage` shows each slice as a share of the total."
+
+  - id: ats107-020-02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Draw one bar per service"
+    source_readings:
+      - sections/section-020/module-02/course-03-bar-pie-and-comparisons.md
+    prompt: "A bar chart shows one bar only. The query is `sum(rate(app_requests_total[5m]))`. What fixes it?"
+    options:
+      - id: a
+        text: "Add `by (service_name)` so the query returns one series for each service"
+        explanation: "Correct. A bar chart draws one bar for each series."
+      - id: b
+        text: "Set `sort: desc`"
+        explanation: "Not correct. Sorting does not add series."
+      - id: c
+        text: "Set `calculation: sum`"
+        explanation: "Not correct. A calculation reduces one series; it does not split it."
+      - id: d
+        text: "Add a second panel"
+        explanation: "Not correct. The existing panel still draws one bar."
+    correct_option: a
+    explanation: "Correct. A bar chart draws one bar for each series."
+
+  - id: ats107-020-02-q10
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use a Markdown panel"
+    source_readings:
+      - sections/section-020/module-02/course-04-markdown-and-instant-queries.md
+    prompt: "What does a `Markdown` panel contain?"
+    options:
+      - id: a
+        text: "The result of a query"
+        explanation: "Not correct. A `Markdown` panel has no query."
+      - id: b
+        text: "Text written in the `text` field"
+        explanation: "Correct. The panel renders the Markdown in `text`."
+      - id: c
+        text: "A link to another dashboard only"
+        explanation: "Not correct. It can hold any Markdown, not only a link."
+      - id: d
+        text: "A copy of a metric"
+        explanation: "Not correct. It does not read metrics."
+    correct_option: b
+    explanation: "Correct. The panel renders the Markdown in `text`."

@@ -288,3 +288,302 @@ questions:
         explanation: "Correct. Several values are written as a regular expression group, so `=~` is needed."
     correct_option: d
     explanation: "Correct. Several values are written as a regular expression group, so `=~` is needed."
+
+  - id: ats107-final-q13
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain scrapeInterval"
+    source_readings:
+      - sections/section-010/module-02/course-01-prometheus-datasource-settings.md
+    prompt: "What does `scrapeInterval` on a `PrometheusDatasource` change?"
+    options:
+      - id: a
+        text: "How often Perses refreshes the dashboard"
+        explanation: "Not correct. Refreshing is set on the dashboard."
+      - id: b
+        text: "The smallest step of a range query, matching how often Prometheus scrapes"
+        explanation: "Correct. Perses uses it so a chart does not ask for points closer together than the data."
+      - id: c
+        text: "How long Prometheus keeps its data"
+        explanation: "Not correct. Retention is a Prometheus setting."
+      - id: d
+        text: "The timeout of each request"
+        explanation: "Not correct. A timeout is sent with `queryParams`, not `scrapeInterval`."
+    correct_option: b
+    explanation: "Correct. Perses uses it so a chart does not ask for points closer together than the data."
+
+  - id: ats107-final-q14
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find a dashboard datasource"
+    source_readings:
+      - sections/section-010/module-02/course-03-datasources-inside-a-dashboard.md
+    prompt: "Where does Perses store a datasource that belongs to one dashboard?"
+    options:
+      - id: a
+        text: "In the field `spec.datasources` of the dashboard"
+        explanation: "Correct. The field is a map from datasource name to a `default` flag and a `plugin`."
+      - id: b
+        text: "In a project `Datasource` with the dashboard's name"
+        explanation: "Not correct. That would be visible to every dashboard of the project."
+      - id: c
+        text: "In a `GlobalDatasource` with a label"
+        explanation: "Not correct. A global datasource is visible to every project."
+      - id: d
+        text: "In the panel's `plugin` block"
+        explanation: "Not correct. A panel selects a datasource; it does not store one."
+    correct_option: a
+    explanation: "Correct. The field is a map from datasource name to a `default` flag and a `plugin`."
+
+  - id: ats107-final-q15
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Pick the unit of a ratio"
+    source_readings:
+      - sections/section-020/module-02/course-01-stat-charts-calculations-units.md
+    prompt: "A query returns the share of errors as a value between 0 and 1. Which unit shows 0.25 as 25 percent?"
+    options:
+      - id: a
+        text: "`percent`"
+        explanation: "Not correct. `percent` expects values from 0 to 100, so 0.25 would show as 0.25 percent."
+      - id: b
+        text: "`percent-decimal`"
+        explanation: "Correct. `percent-decimal` multiplies a value from 0 to 1 by 100."
+      - id: c
+        text: "`decimal`"
+        explanation: "Not correct. `decimal` shows a plain number without a percent sign."
+      - id: d
+        text: "`bytes`"
+        explanation: "Not correct. `bytes` formats a size, not a share."
+    correct_option: b
+    explanation: "Correct. `percent-decimal` multiplies a value from 0 to 1 by 100."
+
+  - id: ats107-final-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose a threshold mode"
+    source_readings:
+      - sections/section-020/module-02/course-02-gauges-and-thresholds.md
+    prompt: "Thresholds should follow the maximum of a gauge instead of fixed numbers. Which `mode` is used?"
+    options:
+      - id: a
+        text: "`absolute`"
+        explanation: "Not correct. `absolute` compares with the numbers you write."
+      - id: b
+        text: "`percent`"
+        explanation: "Correct. `percent` reads each step value as a share of the maximum."
+      - id: c
+        text: "`relative`"
+        explanation: "Not correct. No such mode exists."
+      - id: d
+        text: "`auto`"
+        explanation: "Not correct. No such mode exists."
+    correct_option: b
+    explanation: "Correct. `percent` reads each step value as a share of the maximum."
+
+  - id: ats107-final-q17
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Start the axis at zero"
+    source_readings:
+      - sections/section-020/module-03/course-01-time-series-chart-options.md
+    prompt: "A request rate moves between 9.8 and 10.1 and fills the whole chart. Which setting shows the change at its true size?"
+    options:
+      - id: a
+        text: "`yAxis.min: 0`"
+        explanation: "Correct. A fixed minimum of zero keeps the scale from zooming into the small range."
+      - id: b
+        text: "`visual.lineWidth: 1`"
+        explanation: "Not correct. The line width does not change the scale."
+      - id: c
+        text: "`legend.mode: table`"
+        explanation: "Not correct. The legend does not change the scale."
+      - id: d
+        text: "`connectNulls: true`"
+        explanation: "Not correct. That only draws across gaps."
+    correct_option: a
+    explanation: "Correct. A fixed minimum of zero keeps the scale from zooming into the small range."
+
+  - id: ats107-final-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Make a collapsed group"
+    source_readings:
+      - sections/section-020/module-03/course-02-grid-layouts-and-panel-groups.md
+    prompt: "Which fields start a panel group closed with a title?"
+    options:
+      - id: a
+        text: "`display.title` and `display.collapse.open: false` on the `Grid` spec"
+        explanation: "Correct. Both belong to the display of that layout."
+      - id: b
+        text: "`collapsed: true` on the panel"
+        explanation: "Not correct. The panel has no such field."
+      - id: c
+        text: "`spec.groups` on the dashboard"
+        explanation: "Not correct. No such field exists."
+      - id: d
+        text: "`height: 0` on the items"
+        explanation: "Not correct. That only makes the items flat."
+    correct_option: a
+    explanation: "Correct. Both belong to the display of that layout."
+
+  - id: ats107-final-q19
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Check a file offline"
+    source_readings:
+      - sections/section-020/module-03/course-04-dashboards-as-files.md
+    prompt: "Which command checks a dashboard file against the schemas without sending it to the server?"
+    options:
+      - id: a
+        text: "`percli apply -f FILE`"
+        explanation: "Not correct. `apply` sends the file to the server."
+      - id: b
+        text: "`percli lint -f FILE`"
+        explanation: "Correct. Lint needs no cluster, so it can run in a pipeline."
+      - id: c
+        text: "`percli get dashboard NAME`"
+        explanation: "Not correct. `get` reads from the server."
+      - id: d
+        text: "`percli delete dashboard NAME`"
+        explanation: "Not correct. `delete` removes the dashboard."
+    correct_option: b
+    explanation: "Correct. Lint needs no cluster, so it can run in a pipeline."
+
+  - id: ats107-final-q20
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Why a fixed window breaks"
+    source_readings:
+      - sections/section-030/module-02/course-02-the-rate-interval.md
+    prompt: "Data is scraped every minute and a query uses `rate(...[30s])`. What is the most likely result?"
+    options:
+      - id: a
+        text: "Many points are missing because a window holds fewer than two samples"
+        explanation: "Correct. Prometheus needs at least two samples inside the window."
+      - id: b
+        text: "A very smooth line"
+        explanation: "Not correct. A short window follows every change."
+      - id: c
+        text: "An error from Perses"
+        explanation: "Not correct. The query is valid; it returns few or no points."
+      - id: d
+        text: "The same result as `$__rate_interval`"
+        explanation: "Not correct. The rate interval is never shorter than four scrape intervals."
+    correct_option: a
+    explanation: "Correct. Prometheus needs at least two samples inside the window."
+
+  - id: ats107-final-q21
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Group by several labels"
+    source_readings:
+      - sections/section-030/module-02/course-03-variables-that-choose-a-grouping.md
+    prompt: "A variable allows several values, and the query must read `by (service_name,deployment_environment)`. Which text in the query does that?"
+    options:
+      - id: a
+        text: "`by ($groupby)`"
+        explanation: "Not correct. With several values the default format writes `(a|b)`, which `by` rejects."
+      - id: b
+        text: "`by (${groupby:csv})`"
+        explanation: "Correct. The `csv` format joins the values with commas."
+      - id: c
+        text: "`by (${groupby:regex})`"
+        explanation: "Not correct. The regex format writes `(a|b)`."
+      - id: d
+        text: "`by ($groupby[0])`"
+        explanation: "Not correct. No such syntax exists."
+    correct_option: b
+    explanation: "Correct. The `csv` format joins the values with commas."
+
+  - id: ats107-final-q22
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find an empty list"
+    source_readings:
+      - sections/section-030/module-02/course-04-query-results-as-variable-values.md
+    prompt: "A `PrometheusPromQLVariable` uses `sum(rate(app_requests_total[5m]))` and `labelName: service_name`. Why is the list empty?"
+    options:
+      - id: a
+        text: "`sum` without `by` drops every label, so there is no `service_name` in the result"
+        explanation: "Correct. Keep the label with `sum by (service_name)`."
+      - id: b
+        text: "`labelName` must be `__name__`"
+        explanation: "Not correct. `labelName` is the label whose values fill the list."
+      - id: c
+        text: "Variables cannot use `rate`"
+        explanation: "Not correct. They can use any valid PromQL."
+      - id: d
+        text: "The window `5m` is too long"
+        explanation: "Not correct. The window does not remove labels."
+    correct_option: a
+    explanation: "Correct. Keep the label with `sum by (service_name)`."
+
+  - id: ats107-final-q23
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match several values"
+    source_readings:
+      - sections/section-040/module-02/course-01-cascades-with-many-values.md
+    prompt: "A variable `env` allows several values and the log query must keep lines from all selected environments. Which matcher fits?"
+    options:
+      - id: a
+        text: "`deployment_environment=\"$env\"`"
+        explanation: "Not correct. The `=` operator compares to one exact text, so two values match nothing."
+      - id: b
+        text: "`deployment_environment=~\"$env\"`"
+        explanation: "Correct. `=~` reads the value as a regular expression, and the default format writes several values as `(a|b)`."
+      - id: c
+        text: "`deployment_environment!=\"$env\"`"
+        explanation: "Not correct. That excludes the selected environments."
+      - id: d
+        text: "`deployment_environment~\"$env\"`"
+        explanation: "Not correct. That is not a LogQL operator."
+    correct_option: b
+    explanation: "Correct. `=~` reads the value as a regular expression, and the default format writes several values as `(a|b)`."
+
+  - id: ats107-final-q24
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Search a log line"
+    source_readings:
+      - sections/section-040/module-02/course-02-search-text-in-logs.md
+    prompt: "Which LogQL filter keeps only lines that contain the text `order`?"
+    options:
+      - id: a
+        text: "`|= \"order\"`"
+        explanation: "Correct. `|=` keeps lines that contain the text."
+      - id: b
+        text: "`!= \"order\"`"
+        explanation: "Not correct. That drops lines that contain the text."
+      - id: c
+        text: "`=~ \"order\"`"
+        explanation: "Not correct. That is a label matcher, not a line filter."
+      - id: d
+        text: "`| order`"
+        explanation: "Not correct. That is not a line filter."
+    correct_option: a
+    explanation: "Correct. `|=` keeps lines that contain the text."
+
+  - id: ats107-final-q25
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Combine two conditions"
+    source_readings:
+      - sections/section-040/module-02/course-03-filtering-traces-by-duration.md
+    prompt: "A TraceQL query must match a service and a duration on the same span. Where does `&&` go?"
+    options:
+      - id: a
+        text: "Inside one pair of braces: `{resource.service.name =~ \"$service\" && duration > $slower}`"
+        explanation: "Correct. Conditions inside one pair of braces apply to the same span."
+      - id: b
+        text: "Between two pairs of braces only"
+        explanation: "Not correct. That combines spans that may be different."
+      - id: c
+        text: "Outside the query, in the datasource"
+        explanation: "Not correct. The query carries the condition."
+      - id: d
+        text: "It is not allowed in TraceQL"
+        explanation: "Not correct. `&&` is allowed."
+    correct_option: a
+    explanation: "Correct. Conditions inside one pair of braces apply to the same span."

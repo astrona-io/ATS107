@@ -1,0 +1,245 @@
+# Knowledge check for module 020-03. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats107-020-03
+course_id: ATS107
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: module-020-03
+  title: "Tune Time Series, Layouts And Dashboard Files"
+placement:
+  position: after
+  reading: sections/section-020/module-03/course-05-summary.md
+questions:
+  - id: ats107-020-03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose a legend mode"
+    source_readings:
+      - sections/section-020/module-03/course-01-time-series-chart-options.md
+    prompt: "A chart has six series and the reader needs exact numbers without hovering. Which legend setting helps most?"
+    options:
+      - id: a
+        text: "`mode: list`"
+        explanation: "Not correct. A list shows names only."
+      - id: b
+        text: "`mode: table` with `values`"
+        explanation: "Correct. A table shows a column for each calculation you list."
+      - id: c
+        text: "`position: bottom`"
+        explanation: "Not correct. The position does not add numbers."
+      - id: d
+        text: "`show: false`"
+        explanation: "Not correct. That removes the legend."
+    correct_option: b
+    explanation: "Correct. A table shows a column for each calculation you list."
+
+  - id: ats107-020-03-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Set the axis unit"
+    source_readings:
+      - sections/section-020/module-03/course-01-time-series-chart-options.md
+    prompt: "Where does a time series chart get its unit for tick labels and tooltips?"
+    options:
+      - id: a
+        text: "`yAxis.format.unit`"
+        explanation: "Correct. The axis format holds the unit and the decimal places."
+      - id: b
+        text: "`legend.unit`"
+        explanation: "Not correct. The legend has no unit field."
+      - id: c
+        text: "The query"
+        explanation: "Not correct. A query returns numbers; the panel writes them."
+      - id: d
+        text: "The dashboard `display`"
+        explanation: "Not correct. The dashboard display holds the name only."
+    correct_option: a
+    explanation: "Correct. The axis format holds the unit and the decimal places."
+
+  - id: ats107-020-03-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Start the axis at zero"
+    source_readings:
+      - sections/section-020/module-03/course-01-time-series-chart-options.md
+    prompt: "A request rate moves between 9.8 and 10.1 and fills the whole chart. Which setting shows the change at its true size?"
+    options:
+      - id: a
+        text: "`yAxis.min: 0`"
+        explanation: "Correct. A fixed minimum of zero keeps the scale from zooming into the small range."
+      - id: b
+        text: "`visual.lineWidth: 1`"
+        explanation: "Not correct. The line width does not change the scale."
+      - id: c
+        text: "`legend.mode: table`"
+        explanation: "Not correct. The legend does not change the scale."
+      - id: d
+        text: "`connectNulls: true`"
+        explanation: "Not correct. That only draws across gaps."
+    correct_option: a
+    explanation: "Correct. A fixed minimum of zero keeps the scale from zooming into the small range."
+
+  - id: ats107-020-03-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Stack series correctly"
+    source_readings:
+      - sections/section-020/module-03/course-01-time-series-chart-options.md
+    prompt: "When is `visual.stack: all` the right choice?"
+    options:
+      - id: a
+        text: "When the series are parts of a total"
+        explanation: "Correct. Stacking adds the lines, so the top line is the total."
+      - id: b
+        text: "When the series are latencies of different services"
+        explanation: "Not correct. Added latencies mean nothing."
+      - id: c
+        text: "When the chart has one series"
+        explanation: "Not correct. There is nothing to stack."
+      - id: d
+        text: "Always, to save space"
+        explanation: "Not correct. Stacking changes what the chart means."
+    correct_option: a
+    explanation: "Correct. Stacking adds the lines, so the top line is the total."
+
+  - id: ats107-020-03-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the grid"
+    source_readings:
+      - sections/section-020/module-03/course-02-grid-layouts-and-panel-groups.md
+    prompt: "How many columns does a `Grid` layout have?"
+    options:
+      - id: a
+        text: "12"
+        explanation: "Not correct. A width of 12 is half the grid."
+      - id: b
+        text: "24"
+        explanation: "Correct. A width of 24 fills the row."
+      - id: c
+        text: "100"
+        explanation: "Not correct. The grid is not measured in percent."
+      - id: d
+        text: "It depends on the screen"
+        explanation: "Not correct. The number of columns is fixed; the column width changes."
+    correct_option: b
+    explanation: "Correct. A width of 24 fills the row."
+
+  - id: ats107-020-03-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Make a collapsed group"
+    source_readings:
+      - sections/section-020/module-03/course-02-grid-layouts-and-panel-groups.md
+    prompt: "Which fields start a panel group closed with a title?"
+    options:
+      - id: a
+        text: "`display.title` and `display.collapse.open: false` on the `Grid` spec"
+        explanation: "Correct. Both belong to the display of that layout."
+      - id: b
+        text: "`collapsed: true` on the panel"
+        explanation: "Not correct. The panel has no such field."
+      - id: c
+        text: "`spec.groups` on the dashboard"
+        explanation: "Not correct. No such field exists."
+      - id: d
+        text: "`height: 0` on the items"
+        explanation: "Not correct. That only makes the items flat."
+    correct_option: a
+    explanation: "Correct. Both belong to the display of that layout."
+
+  - id: ats107-020-03-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find an unplaced panel"
+    source_readings:
+      - sections/section-020/module-03/course-02-grid-layouts-and-panel-groups.md
+    prompt: "A panel is in `spec.panels` but in no layout. What happens?"
+    options:
+      - id: a
+        text: "The dashboard is valid and the panel is never shown"
+        explanation: "Correct. Panels and layouts are separate lists."
+      - id: b
+        text: "`percli apply` refuses the file"
+        explanation: "Not correct. Only a layout item that points to a missing panel is refused."
+      - id: c
+        text: "The panel is shown at the bottom"
+        explanation: "Not correct. Perses does not place panels on its own."
+      - id: d
+        text: "The panel is deleted"
+        explanation: "Not correct. Nothing is deleted when you apply a file."
+    correct_option: a
+    explanation: "Correct. Panels and layouts are separate lists."
+
+  - id: ats107-020-03-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Set default time values"
+    source_readings:
+      - sections/section-020/module-03/course-03-time-range-and-refresh.md
+    prompt: "Which two fields of the dashboard spec set the default window and the refresh?"
+    options:
+      - id: a
+        text: "`duration` and `refreshInterval`"
+        explanation: "Correct. The picker and the URL change them for one view only."
+      - id: b
+        text: "`start` and `end`"
+        explanation: "Not correct. Those are URL parameters."
+      - id: c
+        text: "`range` and `refresh`"
+        explanation: "Not correct. No such dashboard fields exist."
+      - id: d
+        text: "`timeRange` and `autoRefresh`"
+        explanation: "Not correct. No such dashboard fields exist."
+    correct_option: a
+    explanation: "Correct. The picker and the URL change them for one view only."
+
+  - id: ats107-020-03-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Share an incident window"
+    source_readings:
+      - sections/section-020/module-03/course-03-time-range-and-refresh.md
+    prompt: "How do you send a colleague the exact window of an incident without changing the dashboard?"
+    options:
+      - id: a
+        text: "Edit `duration` and apply the dashboard"
+        explanation: "Not correct. That changes the dashboard for everyone."
+      - id: b
+        text: "Send the URL with `start` and `end`"
+        explanation: "Correct. The URL holds the window of one view."
+      - id: c
+        text: "Export the dashboard"
+        explanation: "Not correct. An export has the defaults, not the current view."
+      - id: d
+        text: "Delete and recreate the dashboard"
+        explanation: "Not correct. That loses history and changes nothing about the window."
+    correct_option: b
+    explanation: "Correct. The URL holds the window of one view."
+
+  - id: ats107-020-03-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Check a file offline"
+    source_readings:
+      - sections/section-020/module-03/course-04-dashboards-as-files.md
+    prompt: "Which command checks a dashboard file against the schemas without sending it to the server?"
+    options:
+      - id: a
+        text: "`percli apply -f FILE`"
+        explanation: "Not correct. `apply` sends the file to the server."
+      - id: b
+        text: "`percli lint -f FILE`"
+        explanation: "Correct. Lint needs no cluster, so it can run in a pipeline."
+      - id: c
+        text: "`percli get dashboard NAME`"
+        explanation: "Not correct. `get` reads from the server."
+      - id: d
+        text: "`percli delete dashboard NAME`"
+        explanation: "Not correct. `delete` removes the dashboard."
+    correct_option: b
+    explanation: "Correct. Lint needs no cluster, so it can run in a pipeline."

@@ -231,6 +231,12 @@ section is only true for this one.
   | 030 | Dashboard Variables | Variables and scopes |
   | 040 | Cascading Variables Across Signals | Unified incident dashboard |
 
+  Each section has a first module (010-01, 020-01, 030-01, 040-01) and a
+  second module (010-02, 020-02, 030-02, 040-02). Section 020 also has 020-03.
+  Every module has four or five parts, a playground, one graded lab, a quiz
+  and a summary. The sections' `quiz.yaml` and `sections/final-domain-quiz.yaml`
+  cover all modules.
+
 - **The versions:** **Perses v0.54.0** (chart `perses` 0.23.3, Helm 3.22.1,
   `percli` v0.54.0) on a single-node `kind` cluster. The plugins are the ones
   bundled in the v0.54.0 release archive: Prometheus 0.58.0, Loki 0.6.0,
