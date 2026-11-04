@@ -13,7 +13,7 @@
 training:
   id: ATS107
   title: "Perses: Multi-Pillar Datasources & Variable Scopes"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Multi-Pillar Datasources & Variable Scopes
     domain of the Perses training path: global, project and dashboard
