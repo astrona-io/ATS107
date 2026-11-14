@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://astrona.io/courses/perses">
+    <img src="https://astrona.io/courses/perses/domains/ATS107.svg" alt="ATS107: Multi-Pillar Datasources & Variable Scopes, part of the Perses course on Astrona" width="100%">
+  </a>
+</p>
+
 # ATS107 — Multi-Pillar Datasources & Variable Scopes (Perses)
 
 Course material for the **Multi-Pillar Datasources & Variable Scopes** domain
